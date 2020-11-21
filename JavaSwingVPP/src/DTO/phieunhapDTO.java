@@ -47,6 +47,7 @@ public class phieunhapDTO
     
     public phieunhapDTO(String idpn, String idncc, String idnv, String ngaynhap, float tongtien, String trangthai,String idmon,int soluong,float gianhap,float thanhtien)
     {
+        //constructor2
         this.idpn = idpn;
         this.idncc = idncc;
         this.idnv = idnv;
