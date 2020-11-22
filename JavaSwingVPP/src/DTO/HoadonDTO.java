@@ -40,11 +40,9 @@ public class HoadonDTO {
     }
 
     public void setIdsp(String idmon) {
-        this.idmon = idmon;
     }
 
     public String getIdsp() {
-        return idmon;
     }
 
     public void setTrangthai(int trangthai) {
@@ -84,12 +82,9 @@ public class HoadonDTO {
     }
 
 
-    public void setTensp(String tenmonan) {
-        this.tenmonan = tenmonan;
     }
 
     public void setLoaisp(String loaimonan) {
-        this.loaimonan = loaimonan;
     }
 
     public void setGiatien(int giatien) {
@@ -105,11 +100,9 @@ public class HoadonDTO {
     }
 
     public String getTensp() {
-        return tenmonan;
     }
 
     public String getLoaisp() {
-        return loaimonan;
     }
 
     public int getGiatien() {
