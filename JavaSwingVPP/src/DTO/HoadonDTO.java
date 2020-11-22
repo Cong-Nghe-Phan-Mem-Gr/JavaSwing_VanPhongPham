@@ -10,7 +10,6 @@ package DTO;
  * @author USER
  */
 public class HoadonDTO {
-    public String idnv,idhd,idkh,tenmonan,loaimonan,ngaylap,idmon;
     public String idnv,idhd,idkh,tensp,loaisp,ngaylap,idsp;
     public int dongia,soluong,trangthai,thanhtien,tongtien;
 
@@ -41,9 +40,11 @@ public class HoadonDTO {
     }
 
     public void setIdsp(String idmon) {
+        this.idsp = idmon;
     }
 
     public String getIdsp() {
+        return idsp;
     }
 
     public void setTrangthai(int trangthai) {
@@ -87,7 +88,6 @@ public class HoadonDTO {
         this.tensp = tensp;
     }
 
-    public void setLoaisp(String loaimonan) {
     public void setLoaisp(String loaisp) {
         this.loaisp = loaisp;
     }
