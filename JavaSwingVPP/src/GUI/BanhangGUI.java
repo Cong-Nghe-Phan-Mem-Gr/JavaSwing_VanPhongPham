@@ -1,8 +1,8 @@
 
 package GUI;
 
+import BUS.HoadonBUS;
 import BUS.SanphamBUS;
-import static BUS.SanphamBUS.dssp;
 import DTO.SanphamDTO;
 import java.awt.Color;
 import static java.awt.Color.black;
@@ -27,6 +27,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import static BUS.SanphamBUS.dssp;
+import static BUS.HoadonBUS.giohang;
+import static java.awt.Color.red;
+import java.time.LocalDateTime;
+//import static GUI.OverallFrame.currentIdnv;
 
 public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     JPanel searchpanel,functionpanel1,functionpanel2,infopanel,cartpanel,infokh;
@@ -36,7 +41,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     JComboBox loai;
     private Font f = new Font("Arial",Font.BOLD,16);
     private Font f2 = new Font("Arial",Font.BOLD,13);
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private LocalDateTime date = LocalDateTime.now();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private JScrollPane searchjsp,cartjsp;
     //ArrayList<SanphamGUI> displaymangsp;
@@ -48,6 +53,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
             infokhlbl1,infokhlbl2,tienthualbl1,tienthualbl2,tientralbl,magglbl1,magglbl2,goiylbl;  
     JLabel a = new JLabel();
     public static JTable carttable;
+    public static String idhd;
     public static ArrayList<String> category;
     //ArrayList<> mangsp;
     ArrayList<SanphamGUI> mangdisplaysp;
@@ -214,23 +220,23 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         functionpanel1 = new JPanel(null);
         functionpanel1.setBounds(0,300,600,40);
         functionpanel1.setBorder(new LineBorder(black,3,true));
-        ngaylaplbl = new JLabel(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\calendericon.png"));
+        ngaylaplbl = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/calendericon.png")));
         ngaylaplbl.setBounds(5,300,30,40);
-        ngaylaptxt = new JLabel("20/11/2020");
+        ngaylaptxt = new JLabel(dtf.format(date));
         ngaylaptxt.setBounds(37,300,80,40);
         searchtxt = new JTextField(18);
         searchtxt.setBounds(120,305,150,30);
         searchbtn = new JLabel();
         searchbtn.setBounds(340,300,30,40);
-        searchbtn.setIcon(new ImageIcon("/Icons/searchicon1.png"));
+        searchbtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/searchicon1.png")));
         searchbtn.addMouseListener(this);
         prebtn = new JLabel();
         prebtn.setBounds(370,300,30,40);
-        prebtn.setIcon(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\pre.png"));
+        prebtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/pre.png")));
         prebtn.addMouseListener(this);
         nextbtn = new JLabel();
         nextbtn.setBounds(410,300,30,40);
-        nextbtn.setIcon(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\next.png"));
+        nextbtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/next.png")));
         nextbtn.addMouseListener(this);
         pagelbl = new JLabel("1");
         pagelbl.setFont(f);
@@ -246,16 +252,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         add(pagelbl);
         add(nextbtn);
         add(loai);
-        //searchbtn.setIcon(new ImageIcon(this.getClass().getResource("Icons/next.png")));
-       // searchbtn.addMouseListener(this);
-        //searchbtn = new JLabel();
-       // searchbtn.setPreferredSize(new Dimension(30,28));
-        //searchbtn.setIcon(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\pre.png"));
-        //searchbtn.addMouseListener(this);
-        //timetxt.setPreferredSize(preferredSize);
-        //infopanel.add(timetxt);
         
-
         //panel search
         loaddisplaysp(dssp);
         searchpanel = displaysp(0);
@@ -291,8 +288,8 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
             System.out.println(i);
             k=0;
             while(j < arr.size()){
-                SanphamGUI displaysp = new SanphamGUI(arr.get(j).getIdsp(),arr.get(j).getTensp(),Integer.toString(arr.get(j).getTonkho()),
-                        Integer.toString(arr.get(j).getDongia()),arr.get(j).getCogiamgia());
+                SanphamGUI displaysp = new SanphamGUI(arr.get(j).getIdsp(),arr.get(j).getTensp(),arr.get(j).getTonkho(),
+                        arr.get(j).getDongia(),Integer.parseInt(arr.get(j).getCogiamgia()));
                 mangdisplaysp.add(displaysp);
                 displaypanel[i].add(displaysp);
                 k++;j++;
@@ -308,6 +305,10 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         System.out.println(dssp.size());
     }
 
+    public void loadIdhd(){
+        HoadonBUS bus = new HoadonBUS();
+        idhd = bus.loadIdhd();
+    }
     public static void main(String[] args) {
         BanhangGUI a = new BanhangGUI();
         a.setVisible(true);

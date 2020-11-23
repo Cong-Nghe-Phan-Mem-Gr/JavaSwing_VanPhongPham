@@ -15,7 +15,7 @@ import javax.swing.Icon;
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.*;
-//import static GUI.ThanhtoanGUI.carttable;
+import static GUI.BanhangGUI.carttable;
 import java.util.ArrayList;
 import javax.swing.event.TableModelEvent;
 /**
@@ -33,7 +33,14 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
         removebtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 stopCellEditing();
-              
+                //HoadonDTO spxoa = new HoadonDTO();
+                int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
+                if(answer == JOptionPane.YES_OPTION){
+                DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
+                    int i = carttable.getSelectedRow();
+                    tablemodel.removeRow(i);
+                    JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
+                    stopCellEditing();
                 }
             }   
         }); 
