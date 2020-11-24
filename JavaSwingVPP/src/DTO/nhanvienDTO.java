@@ -79,5 +79,44 @@ public class nhanvienDTO
         this.phone = phone;
     }
 
-   
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLoainv() {
+        return loainv;
+    }
+
+    public void setLoainv(String loainv) {
+        this.loainv = loainv;
+    }
+
+    public int getLuong() {
+        return luong;
+    }
+
+    public void setLuong(int luong) {
+        this.luong = luong;
+    }
+
+    public String getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
+    }
+    
 }
