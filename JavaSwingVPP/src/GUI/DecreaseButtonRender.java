@@ -35,9 +35,19 @@ public class DecreaseButtonRender extends AbstractCellEditor implements TableCel
                 //HoadonBUS bus = new HoadonBUS();
               //  bus.removeCart(tenmonan,soluong);
                // tablemodel.removeRow(i);
-                tablemodel.setValueAt(tonkho+1,i,2);
-                tablemodel.setValueAt(sl-1,i,5);
-                stopCellEditing();
+               if(sl == 1){
+                    tablemodel.setValueAt(tonkho+1,i,2);
+                    tablemodel.setValueAt(sl-1,i,5);
+               }else{
+                   int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    if(answer == JOptionPane.YES_OPTION){
+                    tablemodel.removeRow(i);
+                    JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
+                    stopCellEditing();
+                }
+               }
+               stopCellEditing();
+               
             }
         }); 
     }

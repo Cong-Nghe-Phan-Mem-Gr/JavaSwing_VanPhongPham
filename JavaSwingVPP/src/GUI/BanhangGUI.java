@@ -46,12 +46,13 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     private JScrollPane searchjsp,cartjsp;
     //ArrayList<SanphamGUI> displaymangsp;
 //JPanel cartpanel[];
-    private JLabel magglbl,idhdlbl,giatienlbl,thongbaolbl,cartlbl,infolbl,totallbl1,totallbl2,searchbtn,
+    private JLabel magglbl,idhdlbl,giatienlbl,thongbaolbl,cartlbl,infolbl,totallbl1,searchbtn,
             ngaylaplbl,gialbl,goiylbl1,goiylbl2,goiylbl3,goiylbl4,goiylbl5,goiylbl6,goiylbl7,
-            checkoutbtn,thanhtienlbl1,thanhtienlbl2,reloadbtn,printbtn,loaddatabtn,nextbtn,prebtn,
-            pagelbl,ngaylaptxt,infokhlbl,searchbtnkh,closebtn,
-            infokhlbl1,infokhlbl2,tienthualbl1,tienthualbl2,tientralbl,magglbl1,magglbl2,goiylbl;  
+            checkoutbtn,thanhtienlbl1,reloadbtn,printbtn,loaddatabtn,nextbtn,prebtn,
+            pagelbl,ngaylaptxt,infokhlbl,searchbtnkh,tongsl1,closebtn,
+            infokhlbl1,infokhlbl2,tienthualbl1,tientralbl,magglbl1,goiylbl;  
     JLabel a = new JLabel();
+    public static JLabel thanhtienlbl2,totallbl2,tienthualbl2,tongsl2,magglbl2;
     public static JTable carttable;
     public static String idhd;
     public static ArrayList<String> category;
@@ -89,7 +90,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         infokh = new JPanel(new FlowLayout(0,5,5));    
         infokh.setPreferredSize(new Dimension(300,70));
         //infokh.setBounds(620,5,300,300);
-        searchbtnkh = new JLabel(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\searchicon1.png"));
+        searchbtnkh = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/searchicon1.png")));
         searchbtnkh.setPreferredSize(new Dimension(40,30));
         infokhlbl1 = new JLabel("Tìm khách hàng...");
         infokhlbl1.setPreferredSize(new Dimension(180,30));
@@ -98,8 +99,15 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         infokhlbl2.setPreferredSize(new Dimension(280,30));
         infokhlbl2.setFont(f);
         infokhlbl2.setHorizontalAlignment(JLabel.CENTER);
-        closebtn = new JLabel(new ImageIcon("C:\\Users\\nngia\\Documents\\NetBeansProjects\\QLVPP\\src\\main\\java\\Icons\\searchicon1.png"));
-        closebtn.setPreferredSize(new Dimension(40,30));
+        closebtn = new JLabel();
+        closebtn.setPreferredSize(new Dimension(50,30));
+        tongsl1 = new JLabel("Tổng số lượng");
+        tongsl1.setFont(f);
+        tongsl1.setPreferredSize(new Dimension(170,30));
+        tongsl2 = new JLabel("100000");
+        tongsl2.setFont(f);
+        tongsl2.setPreferredSize(new Dimension(110,30));
+        tongsl2.setHorizontalAlignment(JLabel.RIGHT);
         thanhtienlbl1 = new JLabel("Tổng thành tiền");
         thanhtienlbl1.setFont(f);
         thanhtienlbl1.setPreferredSize(new Dimension(170,30));
@@ -107,13 +115,13 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         thanhtienlbl2.setFont(f);
         thanhtienlbl2.setPreferredSize(new Dimension(110,30));
         thanhtienlbl2.setHorizontalAlignment(JLabel.RIGHT);
-        magglbl1 = new JLabel("Mã giảm giá");
+        magglbl1 = new JLabel("Tiền giảm thành viên");
         magglbl1.setPreferredSize(new Dimension(170,30));
         magglbl1.setFont(f);
         maggtxt = new JTextField(10);
         maggtxt.setFont(f);
         maggtxt.setPreferredSize(new Dimension(300,30));
-        magglbl2 = new JLabel("100000");
+        magglbl2 = new JLabel("1000");
         magglbl2.setFont(f);
         magglbl2.setPreferredSize(new Dimension(110,30));
         magglbl2.setHorizontalAlignment(JLabel.RIGHT);
@@ -195,11 +203,12 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         infopanel.add(infokhlbl1);
         infopanel.add(closebtn);
         infopanel.add(infokhlbl2);
+        infopanel.add(tongsl1);
+        infopanel.add(tongsl2);
         infopanel.add(thanhtienlbl1);
         infopanel.add(thanhtienlbl2);
         infopanel.add(magglbl1);
         infopanel.add(magglbl2);
-        infopanel.add(maggtxt);
         infopanel.add(totallbl1);
         infopanel.add(totallbl2);
         infopanel.add(tientralbl);
@@ -279,24 +288,30 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     public void loaddisplaysp(ArrayList<SanphamDTO> arr){
         mangdisplaysp = new ArrayList<SanphamGUI>();
         int pages=0,i=0,j=0,k;
+        System.out.println(arr.size());
         if(arr.size() % 8 != 0) pages +=arr.size()/8+1;
         else pages +=arr.size()/8;
         System.out.println(pages);
         displaypanel = new JPanel[pages];
         while(i<pages){
             displaypanel[i] = new JPanel(new FlowLayout(1,5,5));
-            System.out.println(i);
             k=0;
-            while(j < arr.size()){
+            do{
                 SanphamGUI displaysp = new SanphamGUI(arr.get(j).getIdsp(),arr.get(j).getTensp(),arr.get(j).getTonkho(),
                         arr.get(j).getDongia(),Integer.parseInt(arr.get(j).getCogiamgia()));
                 mangdisplaysp.add(displaysp);
                 displaypanel[i].add(displaysp);
                 k++;j++;
                 if(k == 9) break;
-            }
+            }while(j != arr.size());
             i++;
         }
+    }
+    
+    public static void loadinfo(int tongsl,int tongtien){
+        tongsl2.setText(Integer.toString(tongsl));
+        thanhtienlbl2.setText(Integer.toString(tongtien));
+        totallbl2.setText(Integer.toString(tongtien-Integer.parseInt(magglbl2.getText())));
     }
     
     public void loadsp(){

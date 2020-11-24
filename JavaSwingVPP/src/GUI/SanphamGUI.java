@@ -6,6 +6,7 @@ import DTO.HoadonDTO;
 import static java.awt.Color.black;
 import static java.awt.Color.green;
 import static GUI.BanhangGUI.carttable;
+import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.idhd;
 import static BUS.HoadonBUS.giohang;
 import static BUS.HoadonBUS.tongtien;
@@ -15,13 +16,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 //import static GUI.OverallFrame.currentIdnv;
 
@@ -38,6 +43,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
     ImageIcon increaseicon = new ImageIcon(this.getClass().getResource("/Icons/up.png"));
     ImageIcon decreaseicon = new ImageIcon(this.getClass().getResource("/Icons/down.png"));
     ImageIcon removeicon = new ImageIcon(this.getClass().getResource("/Icons/trashicon1.png"));
+    DefaultTableModel cartmodel;
     public SanphamGUI(String id,String name,int tonkho,int price,int km){
         this.id = id;
         this.name = name;
@@ -104,20 +110,20 @@ public class SanphamGUI extends JPanel implements MouseListener{
 
     
     public void loadCart(){
-        DefaultTableModel cartmodel = new DefaultTableModel(cartheader,0);
+        int tongsl=0,tongtien=0;
         cartmodel = new DefaultTableModel(cartheader,0){
            public boolean isCellEditable(int row, int column) {
-                if(column == 3 || column == 4 || column == 6 || column == 8){
+                if(column == 4 || column == 5 || column == 6 || column == 8){
                     return true;
                 }else return false;
             }     
         }; 
-        sl=1;
          for(GioHangDTO sp : giohang){
             Object[] data = {sp.getIdsp(),sp.getTensp(),sp.getTonkho(),sp.getDongia(),decreaseicon,sp.getSl(),increaseicon,sp.thanhTien(),removeicon};
+            tongsl += sp.sl;
+            tongtien += sp.thanhTien();
             cartmodel.addRow(data);
         }
-        //cartmodel.addRow(data);
         carttable.setModel(cartmodel);
         carttable.getColumnModel().getColumn(4).setCellRenderer(new DecreaseButtonRender());
         carttable.getColumnModel().getColumn(4).setCellEditor(new DecreaseButtonRender());
@@ -125,6 +131,34 @@ public class SanphamGUI extends JPanel implements MouseListener{
         carttable.getColumnModel().getColumn(6).setCellEditor(new IncreaseButtonRender());
         carttable.getColumnModel().getColumn(8).setCellRenderer(new RemoveButtonRender());
         carttable.getColumnModel().getColumn(8).setCellEditor(new RemoveButtonRender());
+        //carttable.getColumnModel().getColumn(5).setCellRenderer(new InputRender());
+        carttable.getColumnModel().setColumnSelectionAllowed(true);
+        carttable.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(carttable.getSelectedColumn() == 5){
+                    
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("release");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+            
+        });
         carttable.getColumnModel().getColumn(0).setPreferredWidth(50);
         carttable.getColumnModel().getColumn(1).setPreferredWidth(100);
         carttable.getColumnModel().getColumn(2).setPreferredWidth(70);
@@ -134,6 +168,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
         carttable.getColumnModel().getColumn(6).setPreferredWidth(40);
         carttable.getColumnModel().getColumn(7).setPreferredWidth(50);
         carttable.getColumnModel().getColumn(8).setPreferredWidth(40);
+        loadinfo(tongsl,tongtien);
     }
 
     
@@ -225,6 +260,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         addCart();
+        
     }
 
     @Override

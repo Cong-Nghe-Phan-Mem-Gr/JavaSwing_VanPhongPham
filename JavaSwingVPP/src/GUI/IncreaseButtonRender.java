@@ -25,17 +25,10 @@ public class IncreaseButtonRender extends AbstractCellEditor implements TableCel
         increasebtn.setOpaque(false);
         increasebtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                //stopCellEditing();
-                //HoadonDTO spxoa = new HoadonDTO();
                     DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
                     int i = carttable.getSelectedRow();
-                    //String tenmonan = carttable.getValueAt(i,2).toString();
                     int sl = Integer.parseInt(carttable.getValueAt(i,5).toString());
                     int tonkho = Integer.parseInt(carttable.getValueAt(i,2).toString());
-                    //System.out.println(tenmonan);
-                    //HoadonBUS bus = new HoadonBUS();
-                  //  bus.removeCart(tenmonan,soluong);
-                   // tablemodel.removeRow(i);
                     tablemodel.setValueAt(tonkho-1,i,2);
                     tablemodel.setValueAt(sl+1,i,5);
                     stopCellEditing();

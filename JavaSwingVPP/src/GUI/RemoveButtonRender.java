@@ -33,7 +33,6 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
         removebtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 stopCellEditing();
-                //HoadonDTO spxoa = new HoadonDTO();
                 int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
                 if(answer == JOptionPane.YES_OPTION){
                 DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
@@ -84,7 +83,7 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
 
     @Override
     public void cancelCellEditing() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
