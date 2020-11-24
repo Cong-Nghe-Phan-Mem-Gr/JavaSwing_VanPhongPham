@@ -47,4 +47,18 @@ public class nhanvienDTO
         this.trangthai = trangthai;
     }
 
+    public String getIdnv() {
+        return idnv;
+    }
+
+    public void setIdnv(String idnv) {
+        this.idnv = idnv;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    
+    
 }
