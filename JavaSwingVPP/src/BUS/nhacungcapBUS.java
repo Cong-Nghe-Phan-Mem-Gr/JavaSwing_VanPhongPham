@@ -44,30 +44,29 @@ public class nhacungcapBUS
     public void docnhacungcap()
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        //neu array rong thi them moi 
            dsncc = new ArrayList<nhacungcapDTO>();
-            dsncc = nccdao.docnhacungcap();//ghi arraylist cua DAO vao arraylist cua BUS
+            dsncc = nccdao.docnhacungcap();
         
     }
     public void themnhacungcap(nhacungcapDTO ncc)
     {
 
-        dsncc.add(ncc);// them vao arr cua bus
+        dsncc.add(ncc);
 
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.themnhacungcap(ncc);//truyá»�n bien ct xuog lá»›p dao
+        nccdao.themnhacungcap(ncc);
         
     }
     
     public void suanhacungcap(nhacungcapDTO ncc)
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.suanhacungcap(ncc);// truyá»�n ct vÃ o dao Ä‘á»ƒ update
-        for(nhacungcapDTO a : dsncc)//duyet arraylist cua bus
+        nccdao.suanhacungcap(ncc);
+        for(nhacungcapDTO a : dsncc)
         {
-                if (a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biáº¿n truyá»�n tá»« gui
+                if (a.getIdncc().equals(ncc.getIdncc()))
                 {
-                    a.setTenncc(ncc.getTenncc());//gan' bien tu GUI vao arraylist
+                    a.setTenncc(ncc.getTenncc());
                     a.setEmail(ncc.getEmail());
                     a.setPhone(ncc.getPhone());
                     break;
