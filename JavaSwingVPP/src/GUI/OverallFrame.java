@@ -219,7 +219,22 @@ import javax.swing.border.MatteBorder;
         return nav;
         
     }
-
+ public static void changeMainInfo(int i) //Đổi Phần hiển thị khi bấm btn trên menu
+    { 
+switch(i)
+{
+       case 1: break;	
+       case 2: break;
+       case 3: break;
+       case 4: break;
+       case 5: break;
+       case 6: break;
+       case 7: break;
+       case 8: break;
+       case 9: break; 
+       default:break;
+}
+}
     @Override
     public void mouseClicked(MouseEvent e) {
             for(int i = 0; i< navObj.size(); i++)
