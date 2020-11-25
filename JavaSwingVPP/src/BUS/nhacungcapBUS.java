@@ -49,16 +49,40 @@ public class nhacungcapBUS
             dsncc = nccdao.docnhacungcap();//ghi arraylist cua DAO vao arraylist cua BUS
         
     }
+    public void themnhacungcap(nhacungcapDTO ncc)
+    {
+
+        dsncc.add(ncc);// them vao arr cua bus
+
+        nhacungcapDAO nccdao = new nhacungcapDAO();
+        nccdao.themnhacungcap(ncc);//truyá»�n bien ct xuog lá»›p dao
+        
+    }
+    
+    public void suanhacungcap(nhacungcapDTO ncc)
+    {
+        nhacungcapDAO nccdao = new nhacungcapDAO();
+        nccdao.suanhacungcap(ncc);// truyá»�n ct vÃ o dao Ä‘á»ƒ update
+        for(nhacungcapDTO a : dsncc)//duyet arraylist cua bus
+        {
+                if (a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biáº¿n truyá»�n tá»« gui
+                {
+                    a.setTenncc(ncc.getTenncc());//gan' bien tu GUI vao arraylist
+                    a.setEmail(ncc.getEmail());
+                    a.setPhone(ncc.getPhone());
+                    break;
+                }
+        }
 
     }
     
     public void xoanhacungcap(nhacungcapDTO ncc)
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.xoanhacungcap(ncc);// truyá»�n ct vÃ o dao Ä‘á»ƒ update
+        nccdao.xoanhacungcap(ncc);// truyÃ¡Â»ï¿½n ct vÃƒÂ o dao Ã„â€˜Ã¡Â»Æ’ update
         for(nhacungcapDTO a : dsncc)//duyet arraylist cua bus
         {
-            if(a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biáº¿n truyá»�n tá»« gui
+            if(a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biÃ¡ÂºÂ¿n truyÃ¡Â»ï¿½n tÃ¡Â»Â« gui
             {               
                 
                 dsncc.remove(a);
@@ -85,7 +109,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃ´ng tÃ¬m tháº¥y");
+//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
 //                break;
 //            }
         }
@@ -106,7 +130,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃ´ng tÃ¬m tháº¥y");
+//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
 //                break;
 //            }
         }
@@ -129,7 +153,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃ´ng tÃ¬m tháº¥y");
+//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
 //                break;
 //            }
         }
