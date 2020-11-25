@@ -41,7 +41,15 @@ public class nhacungcapBUS
         }
         return idpn;
     }
-    
+    public void docnhacungcap()
+    {
+        nhacungcapDAO nccdao = new nhacungcapDAO();
+        //neu array rong thi them moi 
+           dsncc = new ArrayList<nhacungcapDTO>();
+            dsncc = nccdao.docnhacungcap();//ghi arraylist cua DAO vao arraylist cua BUS
+        
+    }
+
     }
     
     public void xoanhacungcap(nhacungcapDTO ncc)
