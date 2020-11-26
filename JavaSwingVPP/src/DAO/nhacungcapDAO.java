@@ -63,6 +63,55 @@ public class nhacungcapDAO
         }
         return dsncc;
     }
+    
+    public void themnhacungcap(nhacungcapDTO tncc)
+    {
+        try
+        {
+        String query = "INSERT INTO `nhacungcap` VALUES ("
+                + "'" +tncc.getIdncc()+ "',"
+                + "'" +tncc.getTenncc()+ "',"
+                + "'" +tncc.getEmail()+ "',"
+                + "'" +tncc.getPhone()+ "',"
+                +"'1')";
+        conn.executeUpdate(query);
+        } catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    
+    public void suanhacungcap(nhacungcapDTO sncc)
+    {
+        try
+        {
+            String query = "UPDATE `nhacungcap` SET "
+                    +"tenncc="+"'"+sncc.getTenncc()+"',"
+                    +"email="+"'"+sncc.getEmail()+"',"
+                    +"phone="+"'"+sncc.getPhone()+"'"
+                    +" where idncc='"+sncc.getIdncc()+"'";
+            conn.executeUpdate(query);
+        } catch (Exception e)
+        {
+            System.out.println("Lỗi sữa  nhà cung cấp");
+        }
+    }
+    
+    public void xoanhacungcap(nhacungcapDTO xncc)
+    {
+        try
+        {
+            String query = "UPDATE `nhacungcap` SET "
+                    +"trangthai="+"'0"
+                    +"' where idncc='"+xncc.getIdncc()+"'";
+            conn.executeUpdate(query);
+        } catch (Exception e)
+        {
+            System.out.println("Lỗi xóa nhà cung cấp giá");
+        }
+    }
+    
+    
     public static void main(String[] args) 
     {
         nhacungcapDAO q = new nhacungcapDAO();
