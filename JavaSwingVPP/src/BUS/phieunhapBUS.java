@@ -1,4 +1,4 @@
-﻿/*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -126,8 +126,25 @@ public class phieunhapBUS
             }
         }
     }
-  
-
+    
+    public static void main(String[] args) {
+        phieunhapBUS bus = new phieunhapBUS();
+        bus.docphieunhap();
+    }
+    
+    public void xoaphieunhap(String pn)
+    {
+        phieunhapDAO dao = new phieunhapDAO();
+        for(phieunhapDTO a : dspn123)//duyet arraylist cua bus
+        {
+            if(a.getIdpn().equals(pn))//so sanh id trong array vs biến truyền từ gui
+            {               
+               dspn123.remove(a);
+               break;
+            }
+        }
+        dao.xoaphieunhap(pn);// truyền ct vào dao để update
+    }
     
     public ArrayList<phieunhapDTO> timtheoMa(String ma)
     {

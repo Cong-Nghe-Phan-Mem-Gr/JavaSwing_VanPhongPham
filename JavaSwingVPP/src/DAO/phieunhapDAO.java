@@ -1,4 +1,4 @@
-﻿/*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -155,6 +155,17 @@ public class phieunhapDAO
         }
     }
     
+    public void xoaphieunhap(String pn)
+    {
+        try
+        {
+            String query = "delete from phieunhap where idpn='"+pn+"'";
+            conn.executeUpdate(query);
+        } catch (Exception e)
+        {
+            System.out.println("Lỗi sữa chương trình giảm giá");
+        }
+    }
     
 
 }
