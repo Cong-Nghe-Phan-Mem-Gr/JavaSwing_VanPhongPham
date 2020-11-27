@@ -150,6 +150,45 @@ public class nhanvienBUS
         }
         return kq;
     }
-    
 
+        public ArrayList<nhanvienDTO> timtheoLname(String lname)
+    {
+        docnhanvien();
+        ArrayList<nhanvienDTO> kq = new ArrayList<nhanvienDTO>();
+        for (nhanvienDTO a : dsnv)
+        {
+            if(a.getLname().indexOf(lname) >=0)
+            {
+                kq.add(a);
+            }
+
+        }
+        return kq;
+    }
+    
+    public ArrayList<nhanvienDTO> timtheoAll(String ma)
+    {
+        docnhanvien();
+        ArrayList<nhanvienDTO> kq = new ArrayList<nhanvienDTO>();
+        for (nhanvienDTO a : dsnv)
+        {
+            if(    
+                    a.getIdnv().indexOf(ma) >=0
+                || a.getFname().indexOf(ma) >=0
+                || a.getLname().indexOf(ma) >=0
+               )
+            {
+                kq.add(a);
+            }
+
+        }
+        return kq;
+    }
+    public void docThongtin(String username)
+    {
+        nhanvienDAO dao = new nhanvienDAO();
+        dao.docThongtin(username);
+        
+        nvdto = dao.docThongtin(username);
+    }
 }
