@@ -1,7 +1,10 @@
 
 package GUI;
 
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
+import static BUS.HoadonBUS.giohang;
+import DTO.GioHangDTO;
+import static GUI.BanhangGUI.carttable;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
@@ -12,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import static sun.misc.ClassFileTransformer.add;
 
 public class DsHDGUI extends JFrame implements MouseListener{
     private JLabel lbl,xoabtn,inbtn,closebtn;
@@ -20,8 +22,9 @@ public class DsHDGUI extends JFrame implements MouseListener{
     private DefaultTableModel model;
     private JScrollPane jsp;
     private String[] header = {"IDHD","IDKH","Ngày lập","Tổng tiền",""};
+    public static JTable table;
     public DsHDGUI(){
-        setSize(400,250);
+        setSize(600,400);
         setUndecorated(true);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -29,19 +32,21 @@ public class DsHDGUI extends JFrame implements MouseListener{
         lbl = new JLabel("Danh sách hóa đơn");
         lbl.setBounds(80,30,250,35);
         lbl.setFont(f);
-        xoabtn = new JLabel("Xóa hóa đơn");
-        xoabtn.setFont(f);
-        xoabtn.setPreferredSize(new Dimension(170,30));
-        inbtn = new JLabel("In hóa đơn");
-        inbtn.setFont(f);
-        inbtn.setPreferredSize(new Dimension(170,30));
-        jsp= new JScrollPane();
-        jsp.setBounds(50,70,300,150);
-        closebtn = new JLabel();
-        ImageIcon closeicon1 = new ImageIcon(this.getClass().getResource("/Icons/closeicon3.png"));
+        
+        model = new DefaultTableModel(header,0);
+        table = new JTable(model);
+        /*for(GioHangDTO sp : giohang){
+            Object[] data = {sp.getIdsp(),sp.getTensp(),sp.getTonkho(),sp.getDongia(),decreaseicon,sp.getSl(),increaseicon,sp.thanhTien(),removeicon};
+            tongsl += sp.sl;
+            tongtien += sp.thanhTien();
+            cartmodel.addRow(data);
+        }*/
+        jsp= new JScrollPane(table);
+        
+        jsp.setBounds(50,70,500,300);
+        closebtn = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/closeicon1.png")));
         closebtn.setBounds(370,0,35,35);
         closebtn.setFont(f);
-        closebtn.setIcon(closeicon1);
         closebtn.addMouseListener(this);
         
         add(lbl);
@@ -52,9 +57,13 @@ public class DsHDGUI extends JFrame implements MouseListener{
         add(jsp);
         
     }
+    public void load(){
+        
+    }
     
     public static void main(String[] args) {
-        
+        DsHDGUI a = new DsHDGUI();
+        a.setVisible(true);
     }
 
     @Override

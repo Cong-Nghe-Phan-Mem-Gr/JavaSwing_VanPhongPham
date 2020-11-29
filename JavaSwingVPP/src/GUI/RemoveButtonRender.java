@@ -7,6 +7,7 @@ package GUI;
 
 //import BUS.HoadonBUS;
 //import DTO.HoadonDTO;
+import BUS.HoadonBUS;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,11 @@ import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.*;
 import static GUI.BanhangGUI.carttable;
+import static GUI.BanhangGUI.mangdisplaysp;
+import static GUI.BanhangGUI.loadinfo;
+import static GUI.BanhangGUI.loadTienthua;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 import java.util.ArrayList;
 import javax.swing.event.TableModelEvent;
 /**
@@ -33,10 +39,22 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
         removebtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 stopCellEditing();
+                HoadonBUS bus = new HoadonBUS();
                 int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
                 if(answer == JOptionPane.YES_OPTION){
                 DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
                     int i = carttable.getSelectedRow();
+                    String idsp = carttable.getValueAt(i,0).toString();
+                    int sl = Integer.parseInt(carttable.getValueAt(i,5).toString());
+                    int tk = Integer.parseInt(carttable.getValueAt(i,2).toString());
+                    for(SanphamGUI sp : mangdisplaysp){
+                        if(sp.getId().equals(idsp)){
+                            sp.setTonkho(tk+sl);
+                        }
+                    }
+                    bus.removeCart(idsp);
+                    loadinfo(tongsl,tongtien);
+                    loadTienthua();
                     tablemodel.removeRow(i);
                     JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
                     stopCellEditing();

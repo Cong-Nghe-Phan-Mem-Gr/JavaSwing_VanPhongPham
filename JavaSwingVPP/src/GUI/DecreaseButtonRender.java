@@ -1,5 +1,6 @@
 package GUI;
 
+import BUS.HoadonBUS;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,13 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import static GUI.BanhangGUI.carttable;
+import static GUI.BanhangGUI.loadinfo;
+import static GUI.BanhangGUI.mangdisplaysp;
+import static GUI.BanhangGUI.loadTienthua;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 import javax.swing.table.DefaultTableModel;
+
 
 public class DecreaseButtonRender extends AbstractCellEditor implements TableCellRenderer,TableCellEditor,ActionListener{
     private JTable table;
@@ -28,27 +35,33 @@ public class DecreaseButtonRender extends AbstractCellEditor implements TableCel
                 //stopCellEditing();
                 DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
                 int i = carttable.getSelectedRow();
-                //String tenmonan = carttable.getValueAt(i,2).toString();
                 int sl = Integer.parseInt(carttable.getValueAt(i,5).toString());
                 int tonkho = Integer.parseInt(carttable.getValueAt(i,2).toString());
-                //System.out.println(tenmonan);
-                //HoadonBUS bus = new HoadonBUS();
-              //  bus.removeCart(tenmonan,soluong);
-               // tablemodel.removeRow(i);
-               if(sl == 1){
+                int dongia = Integer.parseInt(carttable.getValueAt(i,3).toString());
+                String idsp = carttable.getValueAt(i,0).toString();
+                HoadonBUS bus = new HoadonBUS();
+                if(sl != 1){
                     tablemodel.setValueAt(tonkho+1,i,2);
                     tablemodel.setValueAt(sl-1,i,5);
-               }else{
-                   int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    carttable.setValueAt((sl-1)*dongia,i,7); 
+                    bus.giamsl(idsp,1);
+                    for(SanphamGUI sp : mangdisplaysp){
+                        if(idsp.equals(sp.getId())){
+                            sp.setTonkho(tonkho+1);
+                        }
+                    }
+                    loadinfo(tongsl,tongtien);
+                    loadTienthua();
+                }else{
+                    int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
                     if(answer == JOptionPane.YES_OPTION){
                     tablemodel.removeRow(i);
                     JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
                     stopCellEditing();
-                }
-               }
-               stopCellEditing();
-               
+                 }
             }
+                stopCellEditing();
+             }
         }); 
     }
     

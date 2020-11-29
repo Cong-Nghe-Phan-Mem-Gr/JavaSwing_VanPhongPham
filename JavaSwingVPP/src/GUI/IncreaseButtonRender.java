@@ -1,6 +1,12 @@
 package GUI;
 
+import BUS.HoadonBUS;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 import static GUI.BanhangGUI.carttable;
+import static GUI.BanhangGUI.loadinfo;
+import static GUI.BanhangGUI.loadTienthua;
+import static GUI.BanhangGUI.mangdisplaysp;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,13 +31,28 @@ public class IncreaseButtonRender extends AbstractCellEditor implements TableCel
         increasebtn.setOpaque(false);
         increasebtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                    DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
-                    int i = carttable.getSelectedRow();
-                    int sl = Integer.parseInt(carttable.getValueAt(i,5).toString());
-                    int tonkho = Integer.parseInt(carttable.getValueAt(i,2).toString());
+                HoadonBUS bus = new HoadonBUS();
+                DefaultTableModel tablemodel = (DefaultTableModel) carttable.getModel();
+                int i = carttable.getSelectedRow();
+                String idsp = carttable.getValueAt(i,0).toString();
+                int sl = Integer.parseInt(carttable.getValueAt(i,5).toString());
+                int tonkho = Integer.parseInt(carttable.getValueAt(i,2).toString());
+                int dongia = Integer.parseInt(carttable.getValueAt(i,3).toString());
+                if(tonkho != 0){
                     tablemodel.setValueAt(tonkho-1,i,2);
                     tablemodel.setValueAt(sl+1,i,5);
-                    stopCellEditing();
+                    carttable.setValueAt((sl+1)*dongia,i,7); 
+                    bus.tangsl(idsp,1);
+                    for(SanphamGUI sp : mangdisplaysp){
+                         if(idsp.equals(sp.getId())){
+                             sp.setTonkho(tonkho-1);
+                         }
+                    }
+                    loadinfo(tongsl,tongtien);
+                    loadTienthua();
+                }else{
+                    JOptionPane.showMessageDialog(null,"Trong kho không đủ");
+                }
                 }
             });
         }

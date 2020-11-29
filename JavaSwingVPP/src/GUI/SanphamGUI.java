@@ -7,13 +7,14 @@ import static java.awt.Color.black;
 import static java.awt.Color.green;
 import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.loadinfo;
-import static GUI.BanhangGUI.idhd;
 import static BUS.HoadonBUS.giohang;
 import static BUS.HoadonBUS.tongtien;
 import DTO.GioHangDTO;
 import DTO.SanphamDTO;
+import static GUI.BanhangGUI.mangdisplaysp;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
@@ -37,7 +39,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
     LocalDateTime date = LocalDateTime.now();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DetailGUI detail;
-    public static int sl;
+    public int sl;
     ImageIcon img;
     String[] cartheader = {"IDSP","Tên sản phẩm","Tồn kho","Đơn giá","","Số lượng","","Thành tiền",""};
     ImageIcon increaseicon = new ImageIcon(this.getClass().getResource("/Icons/up.png"));
@@ -59,11 +61,11 @@ public class SanphamGUI extends JPanel implements MouseListener{
         setPreferredSize(new Dimension(140,130));
         //setBounds(145);
         setBackground(Color.white);
-        setBorder(new LineBorder(black,3,true));
+        setBorder(new LineBorder(black,1,true));
         try{
-            img = new ImageIcon(this.getClass().getResource("/img/noimg1.jpg"));
+            Image a = new ImageIcon(this.getClass().getResource("/img/"+id+".jpg")).getImage().getScaledInstance(135,125,Image.SCALE_SMOOTH);
+            img = new ImageIcon(a);
         }catch(Exception e){
-            //ImageIcon img = new ImageIcon(this.getClass().getResource(source));
             img = new ImageIcon(this.getClass().getResource("/img/noimg.jpg"));
         }
         hinhlbl = new JLabel(img,JLabel.CENTER);
@@ -80,31 +82,21 @@ public class SanphamGUI extends JPanel implements MouseListener{
         pricelbl.setBackground(new Color(102,178,155));
         pricelbl.setBorder(new LineBorder(black,1,true));
         //pricelbl.setText(price);
-        tonkholbl = new JLabel(Integer.toString(tonkho),JLabel.CENTER);
-        tonkholbl.setBounds(100,100,40,30);
-        tonkholbl.setForeground(Color.RED);
-        tonkholbl.setBorder(new LineBorder(black,1,true));
-        tonkholbl.setBackground(Color.BLUE);
-        
         //hinhlbl.add(namelbl);
         hinhlbl.add(pricelbl);
-        add(tonkholbl);
         add(namelbl);
         add(hinhlbl);
         addMouseListener(this);
         //loadDetail();
     }
     
-    public void loadDetail(){
-        
-        //add(detail);
-        
+    public void loadDetail(){ 
     }
     
     public void addCart(){
         this.tonkho -= 1;
         HoadonBUS hdbus = new HoadonBUS();
-        hdbus.addCart(id,name,tonkho,price,1);
+        hdbus.addCart(id,name,tonkho,price);
         loadCart();
     }
 
@@ -131,13 +123,51 @@ public class SanphamGUI extends JPanel implements MouseListener{
         carttable.getColumnModel().getColumn(6).setCellEditor(new IncreaseButtonRender());
         carttable.getColumnModel().getColumn(8).setCellRenderer(new RemoveButtonRender());
         carttable.getColumnModel().getColumn(8).setCellEditor(new RemoveButtonRender());
-        //carttable.getColumnModel().getColumn(5).setCellRenderer(new InputRender());
-        carttable.getColumnModel().setColumnSelectionAllowed(true);
+        /*carttable.getColumnModel().setColumnSelectionAllowed(true);
+        carttable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(1).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(2).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        carttable.getColumnModel().getColumn(4).setPreferredWidth(50);*/
         carttable.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
+                int sl;
                 if(carttable.getSelectedColumn() == 5){
-                    
+                    try{
+                        String sl1 = JOptionPane.showInputDialog("Nhập số lượng");
+                        sl = Integer.parseInt(sl1);     
+                        if(sl < 1){
+                            JOptionPane.showMessageDialog(null,"Số lượng phải lớn hơn 1",null,JOptionPane.ERROR_MESSAGE); 
+                        }else{ 
+                            int i = carttable.getSelectedRow();
+                            String idsp = carttable.getValueAt(i,0).toString();
+                            int tk = Integer.parseInt(carttable.getValueAt(i,2).toString()); 
+                            int slold = Integer.parseInt(carttable.getValueAt(i,5).toString()); 
+                            int dongia = Integer.parseInt(carttable.getValueAt(i,3).toString());
+                            if((tk+slold) < sl){
+                                JOptionPane.showMessageDialog(null,"Trong kho không đủ",null,JOptionPane.ERROR_MESSAGE); 
+                            }else{
+                                HoadonBUS bus = new HoadonBUS();
+                                if(sl > slold){
+                                    bus.tangsl(idsp,Math.abs(slold-sl));  
+                                }else{
+                                    bus.giamsl(idsp,Math.abs(slold-sl));  
+                                }
+                                carttable.setValueAt(sl,i,5);
+                                carttable.setValueAt((tk+slold)-sl,i,2); 
+                                carttable.setValueAt(sl*dongia,i,7); 
+                                for(SanphamGUI sp : mangdisplaysp){
+                                    if(sp.getId().equals(idsp)){
+                                        sp.setTonkho((tk+slold)-sl);
+                                    }
+                                }
+                                JOptionPane.showMessageDialog(null,"Thay đổi thành công",null,JOptionPane.ERROR_MESSAGE); 
+                            }
+                        }
+                    }catch(Exception ex){
+                        JOptionPane.showMessageDialog(null,"Số lượng không hợp lệ",null,JOptionPane.ERROR_MESSAGE); 
+                    }
                 }
             }
 
@@ -147,7 +177,6 @@ public class SanphamGUI extends JPanel implements MouseListener{
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("release");
             }
 
             @Override
@@ -213,14 +242,6 @@ public class SanphamGUI extends JPanel implements MouseListener{
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getTonkho() {
         return tonkho;
     }
@@ -253,10 +274,6 @@ public class SanphamGUI extends JPanel implements MouseListener{
         this.img = img;
     }
 
-    public double thanhTien(){
-        return this.price*sl;
-    }
-    
     @Override
     public void mouseClicked(MouseEvent e) {
         addCart();
