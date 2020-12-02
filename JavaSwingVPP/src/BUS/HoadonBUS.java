@@ -28,21 +28,12 @@ public class HoadonBUS {
     
     public HoadonBUS(){};
     
-    public void docDshoadon(){
+    public void docDshoadon(String id){
         HoadonDAO data = new HoadonDAO();
-        dshoadon = new ArrayList<HoadonDTO>();
-        dshoadon = data.DocDshoadon();
-    }
-    
-    public void dochoadon(String id)
-    {
-        HoadonDAO dao = new HoadonDAO();
-        dao.dochoadon(id);
         dshd = new ArrayList<HoadonDTO>();
-        dshd = HoadonDAO.dshd;
-
+        dshd = data.DocDshoadon(id);
     }
-    
+  
     public void addCart(String idsp,String tensp,int tonkho,int dongia){
         if(giohang == null) giohang = new ArrayList<GioHangDTO>();
         Boolean loop = false;
@@ -59,7 +50,13 @@ public class HoadonBUS {
         if(loop == false){
             giohang.add(new GioHangDTO(idsp,tensp,tonkho,dongia,1,tongtien += dongia));
             tongsl++;
-            System.out.println(tongtien);
+        }
+        for(SanphamDTO sp : dsspSelling){
+            if(sp.getIdsp().equals(idsp)){
+                sp.setSoluongdaban(sp.getSoluongdaban()+1);
+                sp.setTonkho(sp.getTonkho()-1);
+                break;
+            }
         }
     }
 
@@ -68,6 +65,13 @@ public class HoadonBUS {
         GioHangDTO spxoa = new GioHangDTO();
         for(GioHangDTO gh : giohang){
             if(idsp.equals(gh.idsp)){
+                for(SanphamDTO sp : dsspSelling){
+                    if(sp.getIdsp().equals(idsp)){
+                        sp.setSoluongdaban(sp.getSoluongdaban()-gh.sl);
+                        sp.setTonkho(sp.getTonkho()+gh.sl);
+                        break;
+                    }
+                }
                 spxoa=giohang.get(i);
                 tongtien -= spxoa.thanhtien;
                 tongsl -= spxoa.sl;
@@ -87,8 +91,15 @@ public class HoadonBUS {
                 break;
             }
         }
+        for(SanphamDTO sp : dsspSelling){
+            if(sp.getIdsp().equals(idsp)){
+                sp.setSoluongdaban(sp.getSoluongdaban()-sl);
+                sp.setTonkho(sp.getTonkho()+sl);
+                break;
+            }
+        }
     }
-    
+
     public void tangsl(String idsp,int sl){
          for(GioHangDTO gh : giohang){
             if(gh.getIdsp().equals(idsp)){
@@ -99,106 +110,72 @@ public class HoadonBUS {
                 break;
             }
         }
+        for(SanphamDTO sp : dsspSelling){
+            if(sp.getIdsp().equals(idsp)){
+                sp.setSoluongdaban(sp.getSoluongdaban()+sl);
+                sp.setTonkho(sp.getTonkho()-sl);
+                break;
+            }
+        }
+    }
+    public void removeAll(){
+        for(GioHangDTO gh : giohang){
+            for(SanphamDTO sp : dsspSelling){
+                if(sp.getIdsp().equals(gh.idsp)){
+                    sp.setSoluongdaban(sp.getSoluongdaban()-gh.sl);
+                    sp.setTonkho(sp.getTonkho()+gh.sl);
+                    break;
+                }
+            }
+        }
+        giohang.clear();
+        tongtien=0;
+        tongsl=0;
     }
     
     public ArrayList<HoadonDTO> search(String strsearch){
-        docDshoadon();
         ArrayList<HoadonDTO> kq = new ArrayList<HoadonDTO>();
-        for(HoadonDTO hd : dshoadon){
-            if(hd.idhd.equals(strsearch) || hd.idhd.equals(strsearch )){
+        for(HoadonDTO hd : dshd){
+            if(hd.idhd.equals(strsearch) || hd.idhd.equals(strsearch ) || hd.ngaylap.equals(strsearch)){
                 kq.add(hd);
             }
         }
         return kq;
     }
-    
-    public void checkOut(String idkh,String idnv,String date){
+    public String loadIDHD(){
         HoadonDAO data = new HoadonDAO();
-        data.getIdhd();
-        data.ThemHoadon("HD"+data.getIdhd()+1,idkh,idnv,date, tongtien);
-        for(GioHangDTO sp : giohang){
-            data.ThemChitietHoadon("HD"+data.getIdhd()+1,sp.tensp,sp.sl,sp.dongia,sp.thanhtien);
-            dshoadon.add(new HoadonDTO("HD"+data.getIdhd()+1,idkh,idnv,sp.idsp,sp.tensp,sp.dongia,sp.sl,sp.thanhtien,tongtien,date,1));
-        }
+        return "HD"+(data.getIdhd()+1);
     }
     
-   /*public void checkOut(ArrayList<GioHangDTO> giohang){
+    public void checkOut(String idkh,String idnv,String date){
+        if (dshoadon == null) dshoadon = new ArrayList<HoadonDTO>();
         HoadonDAO data = new HoadonDAO();
-        GioHangDTO hd = new GioHangDTO();
-        data.ThemHoadon(giohang.get(0));
-        for(int i=0;i<giohang.size();i++){
-            hd = giohang.get(i);
-            data.ThemChitietHoadon(hd);
+        SanphamDAO data1 = new SanphamDAO();
+        int a = data.getIdhd()+1;
+        data.ThemHoadon("HD"+a,idkh,idnv,date,tongtien);
+        for(GioHangDTO sp : giohang){
+            data.ThemChitietHoadon("HD"+a,sp.idsp,sp.sl,sp.dongia,sp.thanhtien);
+            for(SanphamDTO sp1 : dsspSelling){
+                if(sp1.getIdsp().equals(sp.getIdsp())){
+                    data1.update(sp1);
+                    break;
+                }
+            }
+            dshoadon.add(new HoadonDTO("HD"+a,idkh,idnv,sp.idsp,sp.tensp,sp.dongia,sp.sl,sp.thanhtien,tongtien,date,1));
         }
         tongtien=0;
         giohang.clear();
     }
     
-    
-    public ArrayList<HoadonDTO> timtheoAll(String ma)
-    {
-        docDshoadon();
-        ArrayList<HoadonDTO> kq = new ArrayList<HoadonDTO>();
-        for (HoadonDTO a : dshoadon)
-        {
-            if(    a.getIdhd().indexOf(ma) >=0
-                || a.getIdnv().indexOf(ma) >=0
-                || a.getNgaylap().indexOf(ma) >=0
-               )
-            {
-                kq.add(a);
-            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
-//                break;
-//            }
-        }
-        return kq;
-    }
-        
-        public ArrayList<HoadonDTO> timtheoMa(String ma)
-    {
-        docDshoadon();
-        ArrayList<HoadonDTO> kq = new ArrayList<HoadonDTO>();
-        for (HoadonDTO a : dshoadon)
-        {
-            if(a.getIdhd().indexOf(ma) >=0)
-            {
-                kq.add(a);
-            }
-
-        }
-        return kq;
-    }
-        
-        public ArrayList<HoadonDTO> timtheongaylap(String ma)
-    {
-        docDshoadon();
-        ArrayList<HoadonDTO> kq = new ArrayList<HoadonDTO>();
-        for (HoadonDTO a : dshoadon)
-        {
-            if(a.getNgaylap().indexOf(ma) >=0)
-            {
-                kq.add(a);
-            }
-
-        }
-        return kq;
-    }
-        
-     public void xoaHoadon(String hd)
-    {
+    public void xoa(String id){
         HoadonDAO dao = new HoadonDAO();
-        
-        for(HoadonDTO a : dshd)//duyet arraylist cua bus
+        for(HoadonDTO a : dshd)
         {
-            if(a.getIdhd().equals(hd))//so sanh id trong array vs biến truyền từ gui
-            {               
+            if(a.getIdhd().equals(id)){               
                 dshd.remove(a);   
                 break;
             }
         }
-        dao.xoaHoadon(hd);// truyền ct vào dao để update
-    }*/
+        dao.Xoa(id);
+    }
 }

@@ -371,7 +371,7 @@ public class SanphamBUS {
     public ArrayList<SanphamDTO> search(String searchstr){
         ArrayList<SanphamDTO> kq = new ArrayList<SanphamDTO>();
         for (SanphamDTO sp : dsspSelling){
-            if(sp.getTensp().indexOf(searchstr) >=0 || sp.getTensp().equals(searchstr)){
+            if(sp.getTensp().indexOf(searchstr) >=0 || sp.tenloai.equals(searchstr)){
                 kq.add(sp);
             }
         }

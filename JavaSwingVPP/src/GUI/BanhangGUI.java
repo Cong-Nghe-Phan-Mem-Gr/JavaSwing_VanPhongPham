@@ -42,32 +42,41 @@ import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import static BUS.KhachHangBUS.dstongnv;
 import DAO.KhachHangDAO;
+import DTO.GioHangDTO;
 import DTO.KhachHang;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
+import java.text.NumberFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-//import static GUI.OverallFrame.currentIdnv;
+import javax.swing.JTextArea;
+import static GUI.OverallFrame.currentIdnv;
 
-public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
+public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
     JPanel searchpanel,functionpanel1,functionpanel2,infopanel,cartpanel,infokh,pagepanel;
     JPanel displaypanel[];
     JTextField searchtxt,maggtxt;
     public static JTextField tientratxt;
     JPanel displaysp;
     JComboBox loai;
-    public static DecimalFormat df = new DecimalFormat(",000");
+    //public static DecimalFormat df = new DecimalFormat(",000");
     private Font f = new Font("Arial",Font.BOLD,16);
-    private Font f2 = new Font("Arial",Font.BOLD,13);
+    private Font f2 = new Font("Arial",Font.PLAIN,16);
     private LocalDateTime date = LocalDateTime.now();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private JScrollPane searchjsp,cartjsp;
     public static ArrayList<SanphamGUI> mangdisplaysp;
     private JLabel magglbl,idhdlbl,giatienlbl,thongbaolbl,historybtn,infolbl,totallbl1,searchbtn,
-            ngaylaplbl,gialbl,goiylbl1,goiylbl2,goiylbl3,goiylbl4,goiylbl5,goiylbl6,goiylbl7,
+            ngaylaplbl,gialbl,goiylbl1,goiylbl2,goiylbl3,goiylbl4,goiylbl5,goiylbl6,
             checkoutbtn,thanhtienlbl1,reloadbtn,printbtn,loaddatabtn,nextbtn,prebtn,
-            pagelbl,ngaylaptxt,infokhlbl,searchbtnkh,tongsl1,closebtn,
-            infokhlbl1,infokhlbl2,tienthualbl1,tientralbl,magglbl1,goiylbl;  
+            pagelbl,ngaylaptxt,infokhlbl,searchbtnkh,tongsl1,closebtn,giohanglbl,
+            infokhlbl1,infokhlbl2,tienthualbl1,tientralbl,magglbl1,goiylbl,xoaallbtn;  
     JLabel a = new JLabel();
+    JTextArea hd = new JTextArea();
     DefaultTableModel cartmodel;
-    public static JLabel thanhtienlbl2,totallbl2,tienthualbl2,tongsl2,magglbl2;
+    public static JLabel thanhtienlbl2,totallbl2,tienthualbl2,tongsl2,magglbl2,goiylbl7;
     public static JTable carttable;
     public String idkh="Khách lẻ";
     public static ArrayList<String> category;
@@ -85,16 +94,40 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         setLayout(null);
         setBackground(new Color(0, 255, 204));
         //panel gio hang
-        //DefaultTableCellEditor cellRender = new DefaultTableCellEditor();
-        //cellRender.add(removebtn);
-        //searchtable.getColumnModel().getColumn(4).setCellRenderer(new ButtonRender());
-        //{public boolean isCellEditable(int row, int column){return false;}}
+        giohanglbl = new JLabel("Giỏ hàng");
+        giohanglbl.setBounds(280,0,100,40);
+        giohanglbl.setFont(f);
+        giohanglbl.setForeground(red);
+        xoaallbtn = new JLabel("Xóa giỏ hàng");
+        xoaallbtn.setBounds(450,0,150,40);
+        xoaallbtn.addMouseListener(this);
+        xoaallbtn.setFont(f);
+        xoaallbtn.setForeground(red);
+        xoaallbtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/clearcart.png")));
+        xoaallbtn.setHorizontalAlignment(JLabel.CENTER);
+        xoaallbtn.setBorder(new LineBorder(red,2));
         cartmodel = new DefaultTableModel(cartheader,0);
         carttable = new JTable(cartmodel);
+        carttable.setModel(cartmodel);
+        carttable.getColumnModel().getColumn(4).setCellRenderer(new DecreaseButtonRender());
+        carttable.getColumnModel().getColumn(4).setCellEditor(new DecreaseButtonRender());
+        carttable.getColumnModel().getColumn(6).setCellRenderer(new IncreaseButtonRender());
+        carttable.getColumnModel().getColumn(6).setCellEditor(new IncreaseButtonRender());
+        carttable.getColumnModel().getColumn(8).setCellRenderer(new RemoveButtonRender());
+        carttable.getColumnModel().getColumn(8).setCellEditor(new RemoveButtonRender());
+        carttable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(1).setPreferredWidth(250);
+        carttable.getColumnModel().getColumn(2).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        carttable.getColumnModel().getColumn(4).setPreferredWidth(30);
+        carttable.getColumnModel().getColumn(5).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(6).setPreferredWidth(30);
+        carttable.getColumnModel().getColumn(7).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(8).setPreferredWidth(30);
+        carttable.setRowHeight(30);
+        carttable.setRowHeight(30);
         cartjsp = new JScrollPane(carttable);
-        //cartjsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //cartjsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        cartjsp.setBounds(0,0,620,250);
+        cartjsp.setBounds(0,50,620,200);
         cartjsp.setBorder(new LineBorder(black,3,true));
         add(cartjsp);
         
@@ -127,40 +160,42 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         tongsl1 = new JLabel("Tổng số lượng");
         tongsl1.setFont(f);
         tongsl1.setPreferredSize(new Dimension(170,30));
-        tongsl2 = new JLabel("100000");
-        tongsl2.setFont(f);
+        tongsl2 = new JLabel("0 sản phẩm");
+        tongsl2.setFont(f2);
         tongsl2.setPreferredSize(new Dimension(110,30));
         tongsl2.setHorizontalAlignment(JLabel.RIGHT);
         thanhtienlbl1 = new JLabel("Tổng thành tiền");
         thanhtienlbl1.setFont(f);
         thanhtienlbl1.setPreferredSize(new Dimension(170,30));
-        thanhtienlbl2 = new JLabel("100000");
-        thanhtienlbl2.setFont(f);
+        thanhtienlbl2 = new JLabel("0");
+        thanhtienlbl2.setFont(f2);
         thanhtienlbl2.setPreferredSize(new Dimension(110,30));
         thanhtienlbl2.setHorizontalAlignment(JLabel.RIGHT);
         magglbl1 = new JLabel("Tiền giảm thành viên");
         magglbl1.setPreferredSize(new Dimension(170,30));
         magglbl1.setFont(f);
-        maggtxt = new JTextField(10);
+        maggtxt = new JTextField(9);
         maggtxt.setFont(f);
         maggtxt.setPreferredSize(new Dimension(300,30));
         magglbl2 = new JLabel("0");
-        magglbl2.setFont(f);
+        magglbl2.setFont(f2);
         magglbl2.setPreferredSize(new Dimension(110,30));
         magglbl2.setHorizontalAlignment(JLabel.RIGHT);
         totallbl1 = new JLabel("Tổng tiền");
         totallbl1.setFont(f);
         totallbl1.setPreferredSize(new Dimension(170,30));
+        totallbl1.setForeground(red);
         totallbl2 = new JLabel("0");
-        totallbl2.setFont(f);
+        totallbl2.setFont(f2);
         totallbl2.setHorizontalAlignment(JLabel.RIGHT);
         totallbl2.setPreferredSize(new Dimension(110,30));
+        totallbl2.setForeground(red);
         tientralbl = new JLabel("Khách trả");
         tientralbl.setFont(f);
         tientralbl.setPreferredSize(new Dimension(150,30));
-        tientratxt = new JTextField(9);
+        tientratxt = new JTextField(10);
         tientratxt.setHorizontalAlignment(JLabel.RIGHT);
-        tientratxt.setFont(f);
+        tientratxt.setFont(f2);
         tientratxt.setPreferredSize(new Dimension(100,30));
         tientratxt.addMouseListener(this);
         tientratxt.addKeyListener(new KeyListener(){
@@ -179,7 +214,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
                  if(e.getKeyCode()== 10){
                     try{
                         loadTienthua();
-                        tientratxt.setText(df.format(Double.parseDouble(tientratxt.getText())).toString());
+                        loadgoiy();
                     }catch(Exception ex){
                         tientratxt.setText("");
                         JOptionPane.showMessageDialog(null,"Nhập số tiền khách trả không hợp lệ.Vui lòng thử lại");
@@ -192,64 +227,66 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         tienthualbl1.setFont(f);
         tienthualbl1.setPreferredSize(new Dimension(170,30));
         tienthualbl2 = new JLabel("0");
-        tienthualbl2.setFont(f);
+        tienthualbl2.setFont(f2);
         tienthualbl2.setPreferredSize(new Dimension(110,30));
         tienthualbl2.setHorizontalAlignment(JLabel.RIGHT);
         goiylbl = new JLabel("Gợi ý mệnh giá");
         goiylbl.setFont(f);
         goiylbl.setPreferredSize(new Dimension(300,30));
-        goiylbl1 = new JLabel(df.format(10000));
-        goiylbl1.setFont(f2);
+        goiylbl1 = new JLabel("10000");
+        goiylbl1.setFont(f);
         goiylbl1.setBorder(new LineBorder(blue,1,true));
         goiylbl1.setForeground(Color.blue);
         goiylbl1.setOpaque(true);
         goiylbl1.setHorizontalAlignment(JLabel.CENTER);
         goiylbl1.setPreferredSize(new Dimension(90,40));
         goiylbl1.addMouseListener(this);
-        goiylbl2 = new JLabel(df.format(20000));
+        goiylbl2 = new JLabel("20000");
         goiylbl2.setBorder(new LineBorder(blue,1,true));
         goiylbl2.setForeground(Color.blue);
         goiylbl2.setOpaque(true);
+        goiylbl2.setFont(f);
         goiylbl2.setHorizontalAlignment(JLabel.CENTER);
         goiylbl2.setPreferredSize(new Dimension(90,40));
         goiylbl2.addMouseListener(this);
-        goiylbl3 = new JLabel(df.format(50000));
-        goiylbl3.setFont(f2);
+        goiylbl3 = new JLabel("50000");
+        goiylbl3.setFont(f);
         goiylbl3.setBorder(new LineBorder(blue,1,true));
         goiylbl3.setForeground(Color.blue);
         goiylbl3.setOpaque(true);
         goiylbl3.setHorizontalAlignment(JLabel.CENTER);
         goiylbl3.setPreferredSize(new Dimension(90,40));
         goiylbl3.addMouseListener(this);
-        goiylbl4 = new JLabel(df.format(100000));
-        goiylbl4.setFont(f2);
+        goiylbl4 = new JLabel("100000");
+        goiylbl4.setFont(f);
         goiylbl4.setBorder(new LineBorder(blue,1,true));
         goiylbl4.setForeground(Color.blue);
         goiylbl4.setOpaque(true);
         goiylbl4.setHorizontalAlignment(JLabel.CENTER);
         goiylbl4.setPreferredSize(new Dimension(90,40));
         goiylbl4.addMouseListener(this);
-        goiylbl5 = new JLabel(df.format(200000));
-        goiylbl5.setFont(f2);
+        goiylbl5 = new JLabel("200000");
+        goiylbl5.setFont(f);
         goiylbl5.setBorder(new LineBorder(blue,1,true));
         goiylbl5.setForeground(Color.blue);
         goiylbl5.setOpaque(true);
         goiylbl5.setHorizontalAlignment(JLabel.CENTER);
         goiylbl5.setPreferredSize(new Dimension(90,40));
         goiylbl5.addMouseListener(this);
-        goiylbl6 = new JLabel(df.format(500000));
-        goiylbl6.setFont(f2);
+        goiylbl6 = new JLabel("500000");
+        goiylbl6.setFont(f);
         goiylbl6.setBorder(new LineBorder(blue,1,true));
         goiylbl6.setForeground(Color.blue);
         goiylbl6.setOpaque(true);
         goiylbl6.setHorizontalAlignment(JLabel.CENTER);
         goiylbl6.setPreferredSize(new Dimension(90,40));
         goiylbl6.addMouseListener(this);
-        goiylbl7 = new JLabel(df.format(50000000));
-        goiylbl7.setFont(f2);
+        goiylbl7 = new JLabel();
+        goiylbl7.setFont(f);
         goiylbl7.setBorder(new LineBorder(blue,1,true));
         goiylbl7.setForeground(Color.blue);
         goiylbl7.setOpaque(true);
+        goiylbl7.setVisible(false);
         goiylbl7.setHorizontalAlignment(JLabel.CENTER);
         goiylbl7.setPreferredSize(new Dimension(280,40));
         goiylbl7.addMouseListener(this);
@@ -288,18 +325,19 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         ngaylaptxt = new JLabel(dtf.format(date));
         ngaylaptxt.setBounds(37,250,80,40);
         searchtxt = new JTextField(18);
-        searchtxt.setBounds(150,250,150,30);
+        searchtxt.setBounds(165,253,150,30);
         searchbtn = new JLabel();
         searchbtn.setBounds(320,250,30,40);
         searchbtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/searchicon1.png")));
         searchbtn.addMouseListener(this);
         loai = new JComboBox(dsloai.toArray());
-        loai.setBounds(480,250,120,30);
-        loai.addItemListener(this);
+        loai.setBounds(470,255,120,25);
+        loai.addActionListener(this);
         reloadbtn = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/refreshicon1.png")));
         reloadbtn.setBounds(350,250,30,40);
         reloadbtn.addMouseListener(this);
         
+        add(giohanglbl);
         add(ngaylaplbl);
         add(ngaylaptxt);
         add(searchtxt);
@@ -309,29 +347,24 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         
         //panel search
         loaddisplaysp(dsspSelling);
-        //searchpanel = new JPanel(new FlowLayout(0,0,0));
-        add(displaysp(0));
-        //searchpanel.setBounds(0,290,610,270);
-        //searchpanel.setBorder(new LineBorder(black,3,true));
-        
-        
+        this.add(displaypanel[0]);
+
         //panel chuc nang 2
         functionpanel2 = new JPanel(new FlowLayout(1,5,5));
-        functionpanel2.setBounds(600,500,300,100);
-        functionpanel2.setBorder(new LineBorder(black,3,true));
+        functionpanel2.setBounds(620,500,300,100);
+        //functionpanel2.setBorder(new LineBorder(black,3,true));
         historybtn = new JLabel("Xem lịch sử");
         historybtn.setPreferredSize(new Dimension(140,30));
         historybtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/idhd.png")));
-        historybtn.setBorder(new LineBorder(green,1,true));
+        historybtn.setBorder(new LineBorder(green,2,true));
         historybtn.setBounds(700,550,150,45);
-        historybtn.setForeground(new Color(255,153,0));
+        historybtn.setForeground(Color.GREEN);
         historybtn.setFont(f);
         historybtn .addMouseListener(this);
         checkoutbtn = new JLabel("Thanh toán");
-        checkoutbtn.setForeground(new Color(255,153,0));
+        checkoutbtn.setForeground(Color.RED);
         checkoutbtn.setIcon(new ImageIcon(this.getClass().getResource("/Icons/checkouticon1.png")));
-        checkoutbtn.setBorder(new LineBorder(red,1,true));
-        //checkoutbtn.setIcon(checkouticon1);
+        checkoutbtn.setBorder(new LineBorder(red,2,true));
         checkoutbtn.setPreferredSize(new Dimension(140,30));
         checkoutbtn.setFont(f);
         checkoutbtn.addMouseListener(this);
@@ -358,9 +391,8 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         pagepanel.add(prebtn);
         pagepanel.add(pagelbl);
         pagepanel.add(nextbtn);
-        
-        //add panel
-       // add(searchpanel);
+       
+        add(xoaallbtn);
         add(functionpanel1);
         add(functionpanel2);
         add(infopanel);
@@ -370,17 +402,12 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     
     public static void loadTienthua(){
         try{
-            System.out.println(Integer.parseInt(tientratxt.getText()));
             int a = Integer.parseInt(tientratxt.getText());
             int b = Integer.parseInt(totallbl2.getText());
-            tienthualbl2.setText(df.format(a-b));
+            tienthualbl2.setText(Integer.toString(a-b));
         }catch(Exception e){
             
         }
-    }
-    
-    public JPanel displaysp(int page){
-        return displaypanel[page];
     }
     
     public void loaddisplaysp(ArrayList<SanphamDTO> arr){
@@ -393,7 +420,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         while(i<pagemax){
             displaypanel[i] = new JPanel(new FlowLayout(1,7,7));
             displaypanel[i].setBounds(0,290,610,285);
-            displaypanel[i].setBorder(new LineBorder(black,2,true));
+            displaypanel[i].setBorder(new LineBorder(blue,2,true));
             k=0;
             while(j != arr.size()){
                 SanphamGUI displaysp = new SanphamGUI(arr.get(j).getIdsp(),arr.get(j).getTensp(),arr.get(j).getTonkho(),
@@ -408,6 +435,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     }
     
     public void loadPagepanel(){
+        pagelbl.setVisible(true); 
         if(pagemax == 1){
             prebtn.setVisible(false);
             nextbtn.setVisible(false);
@@ -427,20 +455,42 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
         }
     }
     
+    public static void loadgoiy(){
+        if(!totallbl2.getText().equals("0")){
+            goiylbl7.setText(totallbl2.getText());
+            goiylbl7.setVisible(true);
+        }else{
+            goiylbl7.setVisible(false);
+        }
+    }
+    
     public static void loadinfo(int tongsl,int tongtien){
-        tongsl2.setText(Integer.toString(tongsl));
+        tongsl2.setText(Integer.toString(tongsl)+" sản phẩm");
         thanhtienlbl2.setText(Integer.toString(tongtien));
         totallbl2.setText(Integer.toString(tongtien-Integer.parseInt(magglbl2.getText())));
-        //loadTienthua();
-        //tienthualbl2.setText(df.format(Integer.parseInt(tientratxt.getText())-tongtien));
-        
+        loadTienthua();
+        loadgoiy();
+    }
+    public void resetinfo(){
+        tongsl2.setText("0 sản phẩm");
+        thanhtienlbl2.setText("0");
+        totallbl2.setText("0");
+        loadTienthua();
+        loadgoiy();
     }
     public void loadKH(String idkh,String ho,String ten,String sdt){
         searchbtnkh.setVisible(false);
         infokhlbl1.setVisible(false);
         closebtn.setVisible(true);
-        infokhlbl2.setText(ho+""+ten+"-"+sdt);
+        infokhlbl2.setText(ho+" "+ten+"-"+sdt);
         this.idkh = idkh;
+      /*  if(tongtien > 1000000){
+            
+        }else if(){
+            
+        }else{
+            
+        }*/
     }
     
     public void discardKH(){
@@ -453,7 +503,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     }
     public void loadsp(){
         SanphamBUS bus = new SanphamBUS();
-        if(dsspSelling == null) bus.docDsspSelling();
+        bus.docDsspSelling();
     }
     
     public void loadloai(){
@@ -466,13 +516,6 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
     }
     
     @Override
-    public void itemStateChanged(ItemEvent e) {
-        if(e.getSource() == loai){
-            
-        }
-    }
-
-    @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == displaysp){
             
@@ -484,7 +527,7 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
              loadTienthua();
         }else if(e.getSource() == goiylbl3){
             tientratxt.setText(goiylbl3.getText());
-             loadTienthua();
+            loadTienthua();
         }else if(e.getSource() == goiylbl4){
             tientratxt.setText(goiylbl4.getText());
              loadTienthua();
@@ -507,29 +550,29 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
             tientratxt.setText(goiylbl7.getText());
              loadTienthua();
         }else if(e.getSource() == prebtn){
-            this.remove(displaysp(page--));
-            pagelbl.setText(Integer.toString(page+1));
+            this.remove(displaypanel[page--]);
+            this.add(displaypanel[page]);
             this.revalidate();
             this.repaint();
-            this.add(displaysp(page));
+            pagelbl.setText(Integer.toString(page+1));
             loadPagepanel();
         }else if(e.getSource() == nextbtn){
-            this.remove(displaysp(page++));
-            pagelbl.setText(Integer.toString(page+1));
+            this.remove(displaypanel[page++]);
+            this.add(displaypanel[page]);
             this.revalidate();
             this.repaint();
-            this.add(displaysp(page));
+            pagelbl.setText(Integer.toString(page+1));
             loadPagepanel();
         }else if(e.getSource() == reloadbtn){
             int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn tải lại sản phẩm bán không ?",null,JOptionPane.WARNING_MESSAGE);
                 if(answer == JOptionPane.YES_OPTION){
                 searchtxt.setText("");
-                this.remove(displaysp(page=0));
-                this.revalidate();
-                this.repaint();
+                this.remove(displaypanel[page=0]);
                 loadsp();  
                 loaddisplaysp(dsspSelling);
-                this.add(displaysp(page));
+                this.add(displaypanel[0]);
+                this.revalidate();
+                this.repaint();
                 loadPagepanel();
                 JOptionPane.showMessageDialog(null,"Làm mới thành công");
             }
@@ -538,13 +581,44 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
             int i = carttable.getRowCount();
             if(i==0){
                 JOptionPane.showMessageDialog(null,"Vui lòng mua hàng trước khi thanh toán","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-	    }else{
+	    }else if(Integer.parseInt(tienthualbl2.getText())<1){
+                JOptionPane.showMessageDialog(null,"Tiền trả không hợp lệ","Cảnh báo",JOptionPane.WARNING_MESSAGE);
+            }else{
 		int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn thanh toán không ?",null,JOptionPane.WARNING_MESSAGE);
                 if(answer == JOptionPane.YES_OPTION){
-                    bus.checkOut(idkh,"NV1",dtf.format(date));
+                    int answer1 = JOptionPane.showConfirmDialog(null,"Bạn có muốn in hóa đơn không?",null,JOptionPane.WARNING_MESSAGE);
+                    if(answer1 == JOptionPane.YES_OPTION){
+                        StringBuilder hd = new StringBuilder();
+                        hd.append("\tHóa đơn\n");
+                        hd.append("=====================================\n");
+                        hd.append("ID hóa đơn:"+bus.loadIDHD()+"\n");
+                        hd.append("ID nhân viên:"+currentIdnv+"\n");
+                        hd.append("Ngày lập:"+ngaylaptxt.getText()+"\n");
+                        hd.append("=====================================\n");
+                        hd.append("SL+\t+Đơn giá+\t+Thành tiền\n");
+                        for(GioHangDTO sp : giohang){
+                            hd.append(sp.tensp+"\n");
+                            hd.append(sp.sl+"\t"+sp.dongia+"\t"+sp.thanhtien+"\n");
+                        }
+                        hd.append("=====================================\n");
+                        hd.append("\tTổng tiền: "+totallbl2.getText()+"\n");
+                        hd.append("\tKhách trả: "+tientratxt.getText()+"\n");
+                        hd.append("=====================================\n");
+                        hd.append("\tTiền thừa: "+tienthualbl2.getText()+"\n");
+                        hd.append("=====================================\n");      
+                        hd.append("Cám ơn và hẹn gặp lại!!!!");
+                        this.hd.setText(hd.toString());
+                        try {
+                            this.hd.print();
+                        } catch (PrinterException ex) {
+                            System.out.println("cc");
+                        }
+                    }
+                    bus.checkOut(idkh,currentIdnv,dtf.format(date));
                     cartmodel = new DefaultTableModel(cartheader,0);
                     carttable.setModel(cartmodel);
                     loadsp();
+                    resetinfo();
                 }
             }    
         }else if(e.getSource() == closebtn){
@@ -569,13 +643,36 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
             if(dstimkiem.size()==0){ 
                 JOptionPane.showMessageDialog(null,"Không tìm thấy kết quả phù hợp");
             }else{
-                this.remove(displaysp(page=0));
+                this.remove(displaypanel[page=0]);
+                loaddisplaysp(dstimkiem);
+                this.add(displaypanel[0]);
                 this.revalidate();
                 this.repaint();
-                loaddisplaysp(dstimkiem);
-                this.add(displaysp(page));
                 loadPagepanel();
             }
+        }else if(e.getSource() == xoaallbtn){
+            if(giohang == null || giohang.size()==0){
+                JOptionPane.showMessageDialog(null,"Chưa có sản phẩm nào trong giỏ hàng");
+            }else{
+                HoadonBUS bus = new HoadonBUS();
+                bus.removeAll();
+                DefaultTableModel model = (DefaultTableModel) carttable.getModel();
+                int rowcount = model.getRowCount();
+                for(GioHangDTO gh : giohang){
+                    for(SanphamGUI sp : mangdisplaysp){
+                        if(sp.getId().equals(gh.idsp)){
+                            sp.setTonkho(gh.tonkho+gh.sl);
+                        }
+                    }
+                }
+                model.setRowCount(0);
+                model.fireTableStructureChanged();
+                resetinfo();
+                JOptionPane.showMessageDialog(null,"Xóa thành công!!!");
+            }
+        }else if(e.getSource() == historybtn){
+            DsHDGUI a = new DsHDGUI();
+            a.setVisible(true);
         }
     }
 
@@ -595,5 +692,22 @@ public class BanhangGUI extends JFrame implements ItemListener,MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == loai){
+            JComboBox cb = (JComboBox)e.getSource();
+            SanphamBUS bus = new SanphamBUS();
+            ArrayList<SanphamDTO> dstimkiem = new ArrayList();
+            dstimkiem = bus.search((String) loai.getSelectedItem());
+            this.remove(displaypanel[page=0]);
+            loaddisplaysp(dstimkiem);
+            dstimkiem.size();
+            this.add(displaypanel[page]);
+            this.revalidate();
+            this.repaint();
+            loadPagepanel();
+        }
     }
 }

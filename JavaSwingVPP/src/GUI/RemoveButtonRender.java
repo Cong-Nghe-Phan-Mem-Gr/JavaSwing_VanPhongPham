@@ -5,8 +5,6 @@
  */
 package GUI;
 
-//import BUS.HoadonBUS;
-//import DTO.HoadonDTO;
 import BUS.HoadonBUS;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -20,14 +18,12 @@ import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.mangdisplaysp;
 import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.loadTienthua;
+import static GUI.BanhangGUI.loadgoiy;
 import static BUS.HoadonBUS.tongsl;
 import static BUS.HoadonBUS.tongtien;
 import java.util.ArrayList;
 import javax.swing.event.TableModelEvent;
-/**
- *
- * @author USER
- */
+
 public class RemoveButtonRender extends AbstractCellEditor implements TableCellRenderer,TableCellEditor,ActionListener{
     private JTable table;
     private JButton removebtn;
@@ -55,6 +51,7 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
                     bus.removeCart(idsp);
                     loadinfo(tongsl,tongtien);
                     loadTienthua();
+                    loadgoiy();
                     tablemodel.removeRow(i);
                     JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
                     stopCellEditing();

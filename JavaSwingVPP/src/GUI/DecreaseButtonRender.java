@@ -1,6 +1,8 @@
 package GUI;
 
 import BUS.HoadonBUS;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +19,11 @@ import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.mangdisplaysp;
 import static GUI.BanhangGUI.loadTienthua;
-import static BUS.HoadonBUS.tongsl;
-import static BUS.HoadonBUS.tongtien;
+import static GUI.BanhangGUI.carttable;
+import static GUI.BanhangGUI.loadTienthua;
+import static GUI.BanhangGUI.loadgoiy;
+import static GUI.BanhangGUI.loadinfo;
+import static GUI.BanhangGUI.mangdisplaysp;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -53,14 +58,23 @@ public class DecreaseButtonRender extends AbstractCellEditor implements TableCel
                     loadinfo(tongsl,tongtien);
                     loadTienthua();
                 }else{
+                    stopCellEditing();
                     int answer = JOptionPane.showConfirmDialog(null,"Bạn có muốn xóa không?","Thông báo",JOptionPane.WARNING_MESSAGE);
                     if(answer == JOptionPane.YES_OPTION){
-                    tablemodel.removeRow(i);
-                    JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
-                    stopCellEditing();
-                 }
-            }
-                stopCellEditing();
+                        for(SanphamGUI sp : mangdisplaysp){
+                            if(sp.getId().equals(idsp)){
+                                sp.setTonkho(tonkho+sl);
+                            }
+                        }
+                        bus.removeCart(idsp);
+                        loadinfo(tongsl,tongtien);
+                        loadTienthua();
+                        loadgoiy();
+                        tablemodel.removeRow(i);
+                        JOptionPane.showMessageDialog(null,"Bạn đã xóa thành công");
+                        stopCellEditing();
+                    }
+                }
              }
         }); 
     }

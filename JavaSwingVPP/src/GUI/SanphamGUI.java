@@ -14,6 +14,7 @@ import DTO.SanphamDTO;
 import static GUI.BanhangGUI.mangdisplaysp;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -57,11 +58,9 @@ public class SanphamGUI extends JPanel implements MouseListener{
     
     public void inits(){
         setLayout(null);
-        //setIcon();
         setPreferredSize(new Dimension(140,130));
-        //setBounds(145);
         setBackground(Color.white);
-        setBorder(new LineBorder(black,1,true));
+        setBorder(new LineBorder(Color.BLUE,1,true));
         try{
             Image a = new ImageIcon(this.getClass().getResource("/img/"+id+".jpg")).getImage().getScaledInstance(135,125,Image.SCALE_SMOOTH);
             img = new ImageIcon(a);
@@ -69,28 +68,22 @@ public class SanphamGUI extends JPanel implements MouseListener{
             img = new ImageIcon(this.getClass().getResource("/img/noimg.jpg"));
         }
         hinhlbl = new JLabel(img,JLabel.CENTER);
-        //hinhlbl.setPreferredSize(new Dimension(140,130));
         hinhlbl.setBounds(0,0,140,100);
         hinhlbl.setBackground(Color.red);
         namelbl = new JLabel(name,JLabel.CENTER);
         namelbl.setBounds(0,100,100,30);
         namelbl.setBackground(Color.BLUE);
-        //namelbl.setBorder(new LineBorder(black,1,true));
-        //namelbl.setText(id);
         pricelbl = new JLabel(Integer.toString(price),JLabel.CENTER);
         pricelbl.setBounds(100,0,40,40);
         pricelbl.setBackground(new Color(102,178,155));
-        pricelbl.setBorder(new LineBorder(black,1,true));
-        //pricelbl.setText(price);
-        //hinhlbl.add(namelbl);
+        pricelbl.setFont(new Font("Arial",Font.BOLD,11));
+        pricelbl.setBorder(new LineBorder(Color.RED,1,true));
+        pricelbl.setForeground(Color.RED);
         hinhlbl.add(pricelbl);
         add(namelbl);
         add(hinhlbl);
         addMouseListener(this);
         //loadDetail();
-    }
-    
-    public void loadDetail(){ 
     }
     
     public void addCart(){
@@ -110,7 +103,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
                 }else return false;
             }     
         }; 
-         for(GioHangDTO sp : giohang){
+        for(GioHangDTO sp : giohang){
             Object[] data = {sp.getIdsp(),sp.getTensp(),sp.getTonkho(),sp.getDongia(),decreaseicon,sp.getSl(),increaseicon,sp.thanhTien(),removeicon};
             tongsl += sp.sl;
             tongtien += sp.thanhTien();
@@ -123,16 +116,20 @@ public class SanphamGUI extends JPanel implements MouseListener{
         carttable.getColumnModel().getColumn(6).setCellEditor(new IncreaseButtonRender());
         carttable.getColumnModel().getColumn(8).setCellRenderer(new RemoveButtonRender());
         carttable.getColumnModel().getColumn(8).setCellEditor(new RemoveButtonRender());
-        /*carttable.getColumnModel().setColumnSelectionAllowed(true);
         carttable.getColumnModel().getColumn(0).setPreferredWidth(70);
-        carttable.getColumnModel().getColumn(1).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(1).setPreferredWidth(250);
         carttable.getColumnModel().getColumn(2).setPreferredWidth(70);
         carttable.getColumnModel().getColumn(3).setPreferredWidth(100);
-        carttable.getColumnModel().getColumn(4).setPreferredWidth(50);*/
+        carttable.getColumnModel().getColumn(4).setPreferredWidth(30);
+        carttable.getColumnModel().getColumn(5).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(6).setPreferredWidth(30);
+        carttable.getColumnModel().getColumn(7).setPreferredWidth(70);
+        carttable.getColumnModel().getColumn(8).setPreferredWidth(30);
+        carttable.setRowHeight(30);
         carttable.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                int sl;
+                int sl=0;
                 if(carttable.getSelectedColumn() == 5){
                     try{
                         String sl1 = JOptionPane.showInputDialog("Nhập số lượng");
@@ -188,15 +185,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
             }
             
         });
-        carttable.getColumnModel().getColumn(0).setPreferredWidth(50);
-        carttable.getColumnModel().getColumn(1).setPreferredWidth(100);
-        carttable.getColumnModel().getColumn(2).setPreferredWidth(70);
-        carttable.getColumnModel().getColumn(3).setPreferredWidth(100);
-        carttable.getColumnModel().getColumn(4).setPreferredWidth(40);
-        carttable.getColumnModel().getColumn(5).setPreferredWidth(50);
-        carttable.getColumnModel().getColumn(6).setPreferredWidth(40);
-        carttable.getColumnModel().getColumn(7).setPreferredWidth(50);
-        carttable.getColumnModel().getColumn(8).setPreferredWidth(40);
+       
         loadinfo(tongsl,tongtien);
     }
 
@@ -276,8 +265,11 @@ public class SanphamGUI extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        addCart();
-        
+        if(this.tonkho > 0){
+            addCart();
+        }else{
+            JOptionPane.showMessageDialog(null,"Trong kho không đủ",null,JOptionPane.ERROR_MESSAGE); 
+        }
     }
 
     @Override
