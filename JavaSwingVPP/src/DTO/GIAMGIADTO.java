@@ -7,54 +7,72 @@ package DTO;
 
 /**
  *
- * @author Asus
+ * @author Nam
  */
-public class GIAMGIADTO {
-    private String MASP;
-    private String MAGG;
-    private String PHANTRAM;
-    private String NGBD;
-    private String NGKT;
-    public GIAMGIADTO(){};
-
-    public String getMASP() {
-        return MASP;
+public class ChuongTrinhGiamDTO {
+    private String idgiam;
+    private String tenchuongtrinh;
+    private String thoigianbatdau;
+    private String thoigianketthuc;
+    private String noidung;
+    public ChuongTrinhGiamDTO()
+    {
+        this.idgiam = null;        
+        this.tenchuongtrinh = null;
+        this.thoigianbatdau = null;
+        this.thoigianketthuc = null;
+        this.noidung = null;
     }
 
-    public void setMASP(String MASP) {
-        this.MASP = MASP;
+    public ChuongTrinhGiamDTO(String idgiam, String tenchuongtrinh, String thoigianbatdau, String thoigianketthuc, String noidung) {
+        this.idgiam = idgiam;
+        this.tenchuongtrinh = tenchuongtrinh;
+        this.thoigianbatdau = thoigianbatdau;
+        this.thoigianketthuc = thoigianketthuc;
+        this.noidung = noidung;
     }
 
-    public String getMAGG() {
-        return MAGG;
+    public String getIdgiam() {
+        return idgiam;
     }
 
-    public void setMAGG(String MAGG) {
-        this.MAGG = MAGG;
+    public String getTenchuongtrinh() {
+        return tenchuongtrinh;
     }
 
-    public String getPHANTRAM() {
-        return PHANTRAM;
+    public String getThoigianbatdau() {
+        return thoigianbatdau;
     }
 
-    public void setPHANTRAM(String PHANTRAM) {
-        this.PHANTRAM = PHANTRAM;
+    public String getThoigianketthuc() {
+        return thoigianketthuc;
     }
 
-    public String getNGBD() {
-        return NGBD;
+    public String getNoidung() {
+        return noidung;
     }
 
-    public void setNGBD(String NGBD) {
-        this.NGBD = NGBD;
+    
+
+    public void setIdgiam(String idgiam) {
+        this.idgiam = idgiam;
     }
 
-    public String getNGKT() {
-        return NGKT;
+    public void setTenchuongtrinh(String tenchuongtrinh) {
+        this.tenchuongtrinh = tenchuongtrinh;
     }
 
-    public void setNGKT(String NGKT) {
-        this.NGKT = NGKT;
+    public void setThoigianbatdau(String thoigianbatdau) {
+        this.thoigianbatdau = thoigianbatdau;
     }
+
+    public void setThoigianketthuc(String thoigianketthuc) {
+        this.thoigianketthuc = thoigianketthuc;
+    }
+
+    public void setNoidung(String noidung) {
+        this.noidung = noidung;
+    }
+
     
 }
