@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class PhanQuyenDAO {
     MyDBConnection conn = new MyDBConnection();

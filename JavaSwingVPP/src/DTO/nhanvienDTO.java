@@ -17,21 +17,13 @@ public class nhanvienDTO
     private String phone;
     private String email;
     private String address;
-    private String loainv;
+    private String loainv, ngaysinh;
     private int luong;
     private String trangthai;
     
     public nhanvienDTO()
     {
-        this.idnv = idnv;
-        this.fname = fname;
-        this.lname = lname;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.loainv = loainv;
-        this.luong = luong;
-        this.trangthai = trangthai;
+        
     }
     
     public nhanvienDTO(String idnv, String fname, String lname, String phone, String email, String address, String loainv, int luong, String trangthai)
@@ -45,6 +37,14 @@ public class nhanvienDTO
         this.loainv = loainv;
         this.luong = luong;
         this.trangthai = trangthai;
+    }
+
+    public String getNgaysinh() {
+        return ngaysinh;
+    }
+
+    public void setNgaysinh(String ngaysinh) {
+        this.ngaysinh = ngaysinh;
     }
 
     public String getIdnv() {

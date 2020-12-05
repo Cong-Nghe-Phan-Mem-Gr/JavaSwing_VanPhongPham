@@ -44,44 +44,45 @@ public class nhacungcapBUS
     public void docnhacungcap()
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
+        //neu array rong thi them moi 
            dsncc = new ArrayList<nhacungcapDTO>();
-            dsncc = nccdao.docnhacungcap();
+            dsncc = nccdao.docnhacungcap();//ghi arraylist cua DAO vao arraylist cua BUS
         
     }
+    
     public void themnhacungcap(nhacungcapDTO ncc)
     {
 
-        dsncc.add(ncc);
+        dsncc.add(ncc);// them vao arr cua bus
 
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.themnhacungcap(ncc);
+        nccdao.themnhacungcap(ncc);//truyền bien ct xuog lớp dao
         
     }
     
     public void suanhacungcap(nhacungcapDTO ncc)
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.suanhacungcap(ncc);
-        for(nhacungcapDTO a : dsncc)
+        nccdao.suanhacungcap(ncc);// truyền ct vào dao để update
+        for(nhacungcapDTO a : dsncc)//duyet arraylist cua bus
         {
-                if (a.getIdncc().equals(ncc.getIdncc()))
+                if (a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biến truyền từ gui
                 {
-                    a.setTenncc(ncc.getTenncc());
+                    a.setTenncc(ncc.getTenncc());//gan' bien tu GUI vao arraylist
                     a.setEmail(ncc.getEmail());
                     a.setPhone(ncc.getPhone());
                     break;
                 }
         }
-
     }
     
     public void xoanhacungcap(nhacungcapDTO ncc)
     {
         nhacungcapDAO nccdao = new nhacungcapDAO();
-        nccdao.xoanhacungcap(ncc);// truyÃ¡Â»ï¿½n ct vÃƒÂ o dao Ã„â€˜Ã¡Â»Æ’ update
+        nccdao.xoanhacungcap(ncc);// truyền ct vào dao để update
         for(nhacungcapDTO a : dsncc)//duyet arraylist cua bus
         {
-            if(a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biÃ¡ÂºÂ¿n truyÃ¡Â»ï¿½n tÃ¡Â»Â« gui
+            if(a.getIdncc().equals(ncc.getIdncc()))//so sanh id trong array vs biến truyền từ gui
             {               
                 
                 dsncc.remove(a);
@@ -108,7 +109,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
 //                break;
 //            }
         }
@@ -129,7 +130,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
 //                break;
 //            }
         }
@@ -152,7 +153,7 @@ public class nhacungcapBUS
             }
 //            else
 //            {
-//                JOptionPane.showMessageDialog(null, "KhÃƒÂ´ng tÃƒÂ¬m thÃ¡ÂºÂ¥y");
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
 //                break;
 //            }
         }

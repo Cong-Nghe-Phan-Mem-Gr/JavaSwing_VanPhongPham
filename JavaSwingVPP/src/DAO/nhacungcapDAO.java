@@ -64,6 +64,8 @@ public class nhacungcapDAO
         return dsncc;
     }
     
+    
+    
     public void themnhacungcap(nhacungcapDTO tncc)
     {
         try
@@ -110,7 +112,6 @@ public class nhacungcapDAO
             System.out.println("Lỗi xóa nhà cung cấp giá");
         }
     }
-    
     
     public static void main(String[] args) 
     {

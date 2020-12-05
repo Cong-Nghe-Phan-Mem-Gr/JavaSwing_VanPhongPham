@@ -7,7 +7,7 @@ package DTO;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class UserDTO {
     private String username;

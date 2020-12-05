@@ -7,7 +7,7 @@ package GUI;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

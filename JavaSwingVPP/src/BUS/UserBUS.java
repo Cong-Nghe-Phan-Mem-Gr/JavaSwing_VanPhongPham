@@ -6,12 +6,13 @@
 package BUS;
 
 import DAO.UserDAO;
+import DAO.nhanvienDAO;
 import DTO.UserDTO;
 import java.util.ArrayList;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class UserBUS {
     public static ArrayList<UserDTO> dsuser; 

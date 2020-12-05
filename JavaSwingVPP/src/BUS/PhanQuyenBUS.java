@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class PhanQuyenBUS {
     public static ArrayList<PhanQuyenDTO> dschitietquyen; 

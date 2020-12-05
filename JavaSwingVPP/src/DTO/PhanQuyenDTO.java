@@ -7,7 +7,7 @@ package DTO;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class PhanQuyenDTO {
     public int idquyenhan;

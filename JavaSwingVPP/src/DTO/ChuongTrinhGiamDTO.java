@@ -7,7 +7,7 @@ package DTO;
 
 /**
  *
- * @author Asus
+ * @author Nam
  */
 public class ChuongTrinhGiamDTO {
     private String idgiam;

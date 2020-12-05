@@ -53,6 +53,13 @@ public class phieunhapBUS
         }
         return idpn;
     }
+  public int tongtien(){
+        int tong=0;
+        for(phieunhapDTO pn: dspn1){
+            tong+=pn.getTongtien();
+        }
+        return tong;
+    }
     public void docphieunhap()
     {
         phieunhapDAO dao = new phieunhapDAO();

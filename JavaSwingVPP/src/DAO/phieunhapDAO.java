@@ -55,7 +55,7 @@ public class phieunhapDAO
                 pn.setTongtien(rs.getFloat("tongtien"));
                 pn.setSoluong(rs.getInt("soluong"));
                 pn.setNgaynhap(rs.getString("ngaynhap"));
-                pn.setIdmon(rs.getString("idmon"));
+                pn.setIdmon(rs.getString("idsanpham"));
                 pn.setThanhtien(rs.getFloat("thanhtien"));
                 dspn.add(pn);
                 System.out.println(dspn);

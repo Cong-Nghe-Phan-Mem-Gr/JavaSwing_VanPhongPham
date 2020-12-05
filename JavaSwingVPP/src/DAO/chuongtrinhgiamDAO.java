@@ -5,17 +5,15 @@
  */
 package DAO;
 
-
 import DTO.ChiTietGiamDTO;
-import DTO.chuongtrinhgiamDTO;
+import DTO.ChuongTrinhGiamDTO;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-
 /**
  *
- * @author Asus
+ * @author Nam
  */
 public class ChuongTrinhGiamDAO {
     MyDBConnection conn = new MyDBConnection();

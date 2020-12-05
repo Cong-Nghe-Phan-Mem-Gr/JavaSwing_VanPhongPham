@@ -37,7 +37,7 @@ public class chitietphieunhapDAO
                 //System.out.println(rs.getString(1)+" "+rs.getString(2));
                 chitietphieunhapDTO dto = new chitietphieunhapDTO();
                 dto.setIdpn(rs.getString("idpn"));//ghi du lieu tu databse vao DTO
-                dto.setIdmon(rs.getString("idmon"));//ghi du lieu tu databse vao DTO
+                dto.setIdmon(rs.getString("idsanpham"));//ghi du lieu tu databse vao DTO
                 dto.setSoluong(rs.getInt("soluong"));
                 dto.setGianhap(rs.getFloat("gianhap"));
                 dto.setThanhtien(rs.getFloat("thanhtien"));

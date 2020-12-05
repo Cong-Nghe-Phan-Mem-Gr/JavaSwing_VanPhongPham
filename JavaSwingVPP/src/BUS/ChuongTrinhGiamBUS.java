@@ -5,58 +5,185 @@
  */
 package BUS;
 
-import DAO.GIAMGIADAO;
-import DTO.GIAMGIADTO;
-import java.sql.Date;
-import java.sql.SQLException;
+import DAO.ChuongTrinhGiamDAO;
+import DTO.ChiTietGiamDTO;
+import DTO.ChuongTrinhGiamDTO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Asus
+ * @author Nam
  */
-public class GIAMGIABUS {
-    public static ArrayList<GIAMGIADTO> dsgg=new ArrayList<>();
-    public boolean them(GIAMGIADTO ggdto) throws SQLException{
-        GIAMGIADAO ggdao1=new GIAMGIADAO();
-        if(dsgg==null)
-            dsgg=ggdao1.Doc();
+public class ChuongTrinhGiamBUS {
+    public static ArrayList<ChuongTrinhGiamDTO> dsgiamgia; 
+    
+    
+    public ChuongTrinhGiamBUS()
+    {
+    }
+    public void docGiamgia()
+    {
+        ChuongTrinhGiamDAO dao = new ChuongTrinhGiamDAO();
+//        if(dsgiamgia == null)//neu array rong thi them moi 
+//        {
+           dsgiamgia = new ArrayList<ChuongTrinhGiamDTO>();
+           
+//            dsgiamgia = dao.docGiamgia();//ghi arraylist cua DAO vao arraylist cua BUS
+//        }
+//        else {
+//            dsgiamgia.clear();
+//            dsgiamgia = dao.docGiamgia();//ghi arraylist cua DAO vao arraylist cua BUS
+//        }
+        dsgiamgia = dao.docGiamgia();
+    }
+    public void themChuongtrinh(ChuongTrinhGiamDTO ct)
+    {
+//        for(ChuongTrinhGiamDTO a : dsgiamgia)
+//        {
+//            if(ct.getIdgiam().equals(a.getIdgiam()))
+//            {
+//                JOptionPane.showMessageDialog(null, "Mã giảm giá trùng");
+//            }
+//        }
+        dsgiamgia.add(ct);// them vao arr cua bus
+//        SimpleDateFormat sp = new SimpleDateFormat("yyyy-MM-dd");
+//            String begin = sp.format(ct.getThoigianbatdau());//format date tu gui r truyen xuong dao
+//            String end = sp.format(ct.getThoigianketthuc());
+//            ct.setThoigianbatdau(begin);
+//            ct.setThoigianketthuc(end);
+        ChuongTrinhGiamDAO dao = new ChuongTrinhGiamDAO();
+        dao.themChuongtrinh(ct);//truyền bien ct xuog lớp dao
         
-        for(int i=0;i<dsgg.size();i++){
-          
-            if(ggdto.getMASP().equals(dsgg.get(i).getMASP())){
-                JOptionPane.showMessageDialog(null,"MASP đã tồn tại");
-                return false;    
+    }
+    
+    public void suaChuongtrinh(ChuongTrinhGiamDTO ct)
+    {
+        ChuongTrinhGiamDAO dao = new ChuongTrinhGiamDAO();
+        dao.suaChuongTrinh(ct);// truyền ct vào dao để update
+        for(ChuongTrinhGiamDTO a : dsgiamgia)//duyet arraylist cua bus
+        {
+                if (a.getIdgiam().equals(ct.getIdgiam()))//so sanh id trong array vs biến truyền từ gui
+                {
+                    a.setTenchuongtrinh(ct.getTenchuongtrinh());//gan' bien tu GUI vao arraylist
+                    a.setThoigianbatdau(ct.getThoigianbatdau());
+                    a.setThoigianketthuc(ct.getThoigianketthuc());
+                    a.setNoidung(ct.getNoidung());
+                    break;
+                }
+        }
+    }
+    
+    public void xoaChuongtrinh(ChuongTrinhGiamDTO ct)
+    {
+        ChuongTrinhGiamDAO dao = new ChuongTrinhGiamDAO();
+        dao.xoaChuongTrinh(ct);// truyền ct vào dao để update
+        for(ChuongTrinhGiamDTO a : dsgiamgia)//duyet arraylist cua bus
+        {
+            if(a.getIdgiam().equals(ct.getIdgiam()))//so sanh id trong array vs biến truyền từ gui
+            {               
+                
+                dsgiamgia.remove(a);
+                break;
             }
         }
-        if(ggdto.getMAGG().equals("") || ggdto.getMASP().equals(""))
-        {
-            JOptionPane.showMessageDialog(null,"Không được để MASP hoặc MAGG rỗng");
-            return false;
-        }
         
-        GIAMGIADAO ggdao=new GIAMGIADAO();
-         int ktngay=0;
-        try{
-            Date s=Date.valueOf(ggdto.getNGBD());
-            Date s1=Date.valueOf(ggdto.getNGKT());
-            ktngay=1;
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Định dạng ngày bắt đầu hoặc ngày kết thúc không hợp lệ");
-            return false;
-        }
-        if(ggdto.getNGBD().compareTo(ggdto.getNGKT())>0)
-        {
-            JOptionPane.showMessageDialog(null,"Ngày bắt đầu phải trước ngày kết thúc");
-            return false;
-        }
-        if(ggdao.Them(ggdto)==false)
-            return false;
-        dsgg.add(ggdto);
-        return true;
     }
- 
+    public static void main(String[] args) {
+        ChuongTrinhGiamBUS bus = new ChuongTrinhGiamBUS();
+    }
+    public ArrayList<ChuongTrinhGiamDTO> timtheoMa(String ma)
+    {
+        docGiamgia();
+        ArrayList<ChuongTrinhGiamDTO> kq = new ArrayList<ChuongTrinhGiamDTO>();
+        for (ChuongTrinhGiamDTO a : dsgiamgia)
+        {
+            if(a.getIdgiam().indexOf(ma) >=0)
+            {
+                kq.add(a);
+            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//                break;
+//            }
+        }
+        return kq;
+    }
+    public ArrayList<ChuongTrinhGiamDTO> timtheoTen(String ma)
+    {
+        docGiamgia();
+        ArrayList<ChuongTrinhGiamDTO> kq = new ArrayList<ChuongTrinhGiamDTO>();
+        for (ChuongTrinhGiamDTO a : dsgiamgia)
+        {
+            if(a.getTenchuongtrinh().indexOf(ma) >=0)
+            {
+                kq.add(a);
+            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//                break;
+//            }
+        }
+        return kq;
+    }
+    public ArrayList<ChuongTrinhGiamDTO> timtheoBegin(String ma)
+    {
+        docGiamgia();
+        ArrayList<ChuongTrinhGiamDTO> kq = new ArrayList<ChuongTrinhGiamDTO>();
+        for (ChuongTrinhGiamDTO a : dsgiamgia)
+        {
+            if(a.getThoigianbatdau().indexOf(ma) >=0)
+            {
+                kq.add(a);
+            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//                break;
+//            }
+        }
+        return kq;
+    }
+    public ArrayList<ChuongTrinhGiamDTO> timtheoEnd(String ma)
+    {
+        docGiamgia();
+        ArrayList<ChuongTrinhGiamDTO> kq = new ArrayList<ChuongTrinhGiamDTO>();
+        for (ChuongTrinhGiamDTO a : dsgiamgia)
+        {
+            if(a.getThoigianketthuc().indexOf(ma) >=0)
+            {
+                kq.add(a);
+            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//                break;
+//            }
+        }
+        return kq;
+    }
+    public ArrayList<ChuongTrinhGiamDTO> timtheoAll(String ma)
+    {
+        docGiamgia();
+        ArrayList<ChuongTrinhGiamDTO> kq = new ArrayList<ChuongTrinhGiamDTO>();
+        for (ChuongTrinhGiamDTO a : dsgiamgia)
+        {
+            if(    a.getIdgiam().indexOf(ma) >=0
+                || a.getTenchuongtrinh().indexOf(ma) >=0
+                || a.getThoigianbatdau().indexOf(ma) >=0
+                || a.getThoigianketthuc().indexOf(ma) >=0
+               )
+            {
+                kq.add(a);
+            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//                break;
+//            }
+        }
+        return kq;
     }
 }

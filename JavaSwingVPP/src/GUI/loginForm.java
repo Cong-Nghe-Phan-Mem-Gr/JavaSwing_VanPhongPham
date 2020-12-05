@@ -17,8 +17,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
  *
- * @author chien
+ * @author MY PC
  */
+
 public class loginForm extends javax.swing.JFrame {
     public static String currentUser = null;
     public static String currentPass = null;
@@ -354,7 +355,6 @@ public class loginForm extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(loginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

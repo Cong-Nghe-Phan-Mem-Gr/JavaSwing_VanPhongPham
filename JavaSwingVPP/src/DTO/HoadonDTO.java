@@ -10,20 +10,16 @@ package DTO;
  * @author USER
  */
 public class HoadonDTO {
-<<<<<<< HEAD
     public String idnv,idhd,idkh,tensp,loaisp,ngaylap,idsp;
-=======
-    public String idnv,idhd,idkh,tenmonan,loaimonan,ngaylap,idmon;
->>>>>>> parent of 8353c2d... updated
     public int dongia,soluong,trangthai,thanhtien,tongtien;
 
     public HoadonDTO(){
         
     }
     
-    public HoadonDTO(String idhd,String idkh,String idnv,String tensp,String idsp,int dongia,int soluong,int thanhtien,int tongtien,String ngaylap,int trangthai){
+    public HoadonDTO(String idhd,String idkh,String idnv,String idsp,String tensp,int dongia,int soluong,int thanhtien,int tongtien,String ngaylap,int trangthai){
         setIdnv(idnv);
-        setIdnv(idkh);
+        setIdkh(idkh);
         setIdhd(idhd);
         setTensp(tensp);
         setIdsp(idsp);
@@ -71,6 +67,14 @@ public class HoadonDTO {
         this.ngaylap = ngaylap;
     }
 
+    public String getIdkh() {
+        return idkh;
+    }
+
+    public void setIdkh(String idkh) {
+        this.idkh = idkh;
+    }
+
     public void setDongia(int dongia) {
         this.dongia = dongia;
     }
@@ -88,14 +92,12 @@ public class HoadonDTO {
     }
 
 
+    public void setTensp(String tensp) {
+        this.tensp = tensp;
     }
 
-<<<<<<< HEAD
-    public void setLoaisp(String loaisp) {
-        this.loaisp = loaisp;
-=======
     public void setLoaisp(String loaimonan) {
->>>>>>> parent of 8353c2d... updated
+        this.loaisp = loaimonan;
     }
 
     public void setGiatien(int giatien) {
@@ -111,9 +113,11 @@ public class HoadonDTO {
     }
 
     public String getTensp() {
+        return tensp;
     }
 
     public String getLoaisp() {
+        return loaisp;
     }
 
     public int getGiatien() {

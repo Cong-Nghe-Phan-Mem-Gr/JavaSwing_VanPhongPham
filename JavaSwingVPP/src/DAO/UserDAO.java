@@ -4,14 +4,12 @@
  * and open the template in the editor.
  */
 package DAO;
-
 import DTO.UserDTO;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class UserDAO {
     MyDBConnection conn = new MyDBConnection();

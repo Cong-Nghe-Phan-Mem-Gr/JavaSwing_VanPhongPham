@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class QuanLyUser extends javax.swing.JPanel {
 

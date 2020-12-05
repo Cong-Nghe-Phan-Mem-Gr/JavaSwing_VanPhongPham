@@ -13,7 +13,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author chien
+ * @author Nam
  */
 public class MyDBConnection {
     String host = "";
@@ -32,7 +32,7 @@ public class MyDBConnection {
         host = "localhost";
         userName = "root";
         passWord = "";
-        database = "qlvpp";
+        database = "qlns";
         //url = "jdbc:mysql://"+host+":"+"3306"+"/"+database;
         this.getConnect();
     }
@@ -71,7 +71,7 @@ public class MyDBConnection {
                 this.conn = DriverManager.getConnection(
                         this.url, this.userName, this.passWord);
                 //System.out.println("ket noi thanh cong");
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.out.println("ket noi database that bai");
                 System.out.println(e);
             }

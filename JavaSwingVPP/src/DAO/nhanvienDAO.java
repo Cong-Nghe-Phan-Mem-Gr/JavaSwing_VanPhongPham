@@ -38,7 +38,7 @@ public class nhanvienDAO
         ArrayList nvlist = new ArrayList<nhanvienDTO>();
         try
         {
-            String query = "SELECT `idnv`, `fname`, `lname`, `phone`, `email`, `address`, `Luong`, `trangthai` FROM `nhanvien`";
+            String query = "SELECT `idnv`, `fname`, `lname`, `phone`, `email`,`ngaysinh`, `address`, `Luong`, `trangthai` FROM `nhanvien`";
             ResultSet rs = conn.executeQuery(query);//thuc thi truy van
         while (rs.next())
             {
@@ -49,9 +49,10 @@ public class nhanvienDAO
                 nvdto.setLname(rs.getString(3));
                 nvdto.setPhone(rs.getString(4));
                 nvdto.setEmail(rs.getString(5));
-                nvdto.setAddress(rs.getString(6));               
-                nvdto.setLuong(rs.getInt(7));
-                nvdto.setTrangthai(Integer.toString(rs.getInt(8)));
+                nvdto.setNgaysinh(rs.getString(6));
+                nvdto.setAddress(rs.getString(7));               
+                nvdto.setLuong(rs.getInt(8));
+                nvdto.setTrangthai(Integer.toString(rs.getInt(9)));
                 nvlist.add(nvdto);//them DTO vao array cua DAO
             }
         } catch(Exception e)
@@ -72,6 +73,7 @@ public class nhanvienDAO
                 + "'" +nv.getPhone()+ "',"
                 + "'" +nv.getEmail()+ "',"
                 + "'" +nv.getAddress()+ "',"
+                + "'" +nv.getNgaysinh()+ "',"
                 + "'" +nv.getLuong()+ "',"
                 + "'" +nv.getTrangthai()+ "');";
         conn.executeUpdate(query);
@@ -91,6 +93,7 @@ public class nhanvienDAO
                     +",phone="+"'"+nv.getPhone()+"'"
                     +",email="+"'"+nv.getEmail()+"'"
                     +",address="+"'"+nv.getAddress()+"'"
+                    +",ngaysinh="+"'"+nv.getNgaysinh()+"'"
                     +",Luong="+"'"+nv.getLuong()+"'"
                     +",trangthai="+"'"+nv.getTrangthai()
                     +"' where idnv='"+nv.getIdnv()+"'";
@@ -132,6 +135,7 @@ public class nhanvienDAO
                 nvdto.setPhone(rs.getString("phone"));
                 nvdto.setEmail(rs.getString("email"));
                 nvdto.setAddress(rs.getString("address"));               
+                nvdto.setNgaysinh(rs.getString("ngaysinh"));               
                 nvdto.setLuong(rs.getInt("Luong"));
             }
         } catch (Exception e)

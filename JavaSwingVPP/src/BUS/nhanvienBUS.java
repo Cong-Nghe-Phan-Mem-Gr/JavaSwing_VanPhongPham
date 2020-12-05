@@ -95,6 +95,7 @@ public class nhanvienBUS
                     a.setPhone(nv.getPhone());
                     a.setEmail(nv.getEmail());
                     a.setAddress(nv.getAddress());                                    
+                    a.setNgaysinh(nv.getNgaysinh());                                    
                     a.setLuong(nv.getLuong());
                     break;
                 }
@@ -150,7 +151,7 @@ public class nhanvienBUS
         }
         return kq;
     }
-
+    
         public ArrayList<nhanvienDTO> timtheoLname(String lname)
     {
         docnhanvien();
