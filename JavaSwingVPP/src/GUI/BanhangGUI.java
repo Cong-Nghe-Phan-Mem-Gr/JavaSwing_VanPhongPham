@@ -195,7 +195,7 @@ public class BanhangGUI extends JPanel implements ActionListener,MouseListener{
         tientralbl = new JLabel("Khách trả");
         tientralbl.setFont(f);
         tientralbl.setPreferredSize(new Dimension(150,30));
-        tientratxt = new JTextField(10);
+        tientratxt = new JTextField(9);
         tientratxt.setHorizontalAlignment(JLabel.RIGHT);
         tientratxt.setFont(f2);
         tientratxt.setPreferredSize(new Dimension(100,30));
@@ -321,7 +321,7 @@ public class BanhangGUI extends JPanel implements ActionListener,MouseListener{
         //panel chuc nang 1
         functionpanel1 = new JPanel(null);
         functionpanel1.setBounds(0,250,600,40);
-        functionpanel1.setBorder(new LineBorder(black,3,true));
+        //functionpanel1.setBorder(new LineBorder(black,3,true));
         ngaylaplbl = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/calendericon.png")));
         ngaylaplbl.setBounds(5,250,30,40);
         ngaylaptxt = new JLabel(dtf.format(date));
@@ -354,6 +354,7 @@ public class BanhangGUI extends JPanel implements ActionListener,MouseListener{
         //panel chuc nang 2
         functionpanel2 = new JPanel(new FlowLayout(1,5,5));
         functionpanel2.setBounds(620,500,300,100);
+        functionpanel2.setBackground(Color.CYAN);
         //functionpanel2.setBorder(new LineBorder(black,3,true));
         historybtn = new JLabel("Xem lịch sử");
         historybtn.setPreferredSize(new Dimension(140,30));

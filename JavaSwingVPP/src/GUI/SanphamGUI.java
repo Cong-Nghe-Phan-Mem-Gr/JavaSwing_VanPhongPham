@@ -8,9 +8,13 @@ import static java.awt.Color.green;
 import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.loadinfo;
 import static BUS.HoadonBUS.giohang;
+import static BUS.HoadonBUS.tongsl;
 import static BUS.HoadonBUS.tongtien;
 import DTO.GioHangDTO;
 import DTO.SanphamDTO;
+import static GUI.BanhangGUI.loadTienthua;
+import static GUI.BanhangGUI.loadgoiy;
+import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.mangdisplaysp;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +35,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 //import static GUI.OverallFrame.currentIdnv;
 
 public class SanphamGUI extends JPanel implements MouseListener{
@@ -47,6 +53,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
     ImageIcon decreaseicon = new ImageIcon(this.getClass().getResource("/Icons/down.png"));
     ImageIcon removeicon = new ImageIcon(this.getClass().getResource("/Icons/trashicon1.png"));
     DefaultTableModel cartmodel;
+    
     public SanphamGUI(String id,String name,int tonkho,int price,int km){
         this.id = id;
         this.name = name;
@@ -83,7 +90,6 @@ public class SanphamGUI extends JPanel implements MouseListener{
         add(namelbl);
         add(hinhlbl);
         addMouseListener(this);
-        //loadDetail();
     }
     
     public void addCart(){
@@ -95,7 +101,7 @@ public class SanphamGUI extends JPanel implements MouseListener{
 
     
     public void loadCart(){
-        int tongsl=0,tongtien=0;
+        int tongsl1=0,tongtien1=0;
         cartmodel = new DefaultTableModel(cartheader,0){
            public boolean isCellEditable(int row, int column) {
                 if(column == 4 || column == 5 || column == 6 || column == 8){
@@ -105,8 +111,8 @@ public class SanphamGUI extends JPanel implements MouseListener{
         }; 
         for(GioHangDTO sp : giohang){
             Object[] data = {sp.getIdsp(),sp.getTensp(),sp.getTonkho(),sp.getDongia(),decreaseicon,sp.getSl(),increaseicon,sp.thanhTien(),removeicon};
-            tongsl += sp.sl;
-            tongtien += sp.thanhTien();
+            tongsl1 += sp.sl;
+            tongtien1 += sp.thanhTien();
             cartmodel.addRow(data);
         }
         carttable.setModel(cartmodel);
@@ -147,9 +153,9 @@ public class SanphamGUI extends JPanel implements MouseListener{
                             }else{
                                 HoadonBUS bus = new HoadonBUS();
                                 if(sl > slold){
-                                    bus.tangsl(idsp,Math.abs(slold-sl));  
+                                    bus.tangsl(idsp,sl-slold);  
                                 }else{
-                                    bus.giamsl(idsp,Math.abs(slold-sl));  
+                                    bus.giamsl(idsp,slold-sl);  
                                 }
                                 carttable.setValueAt(sl,i,5);
                                 carttable.setValueAt((tk+slold)-sl,i,2); 
@@ -159,6 +165,9 @@ public class SanphamGUI extends JPanel implements MouseListener{
                                         sp.setTonkho((tk+slold)-sl);
                                     }
                                 }
+                                loadinfo(tongsl,tongtien);
+                                loadTienthua();
+                                loadgoiy();
                                 JOptionPane.showMessageDialog(null,"Thay đổi thành công",null,JOptionPane.ERROR_MESSAGE); 
                             }
                         }
