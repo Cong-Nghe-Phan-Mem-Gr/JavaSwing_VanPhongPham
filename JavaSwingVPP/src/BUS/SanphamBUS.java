@@ -46,7 +46,23 @@ public class SanphamBUS {
             }
         }
     } 
+    
+    public ArrayList<SanphamDTO> topsp(){
+        ArrayList<SanphamDTO> mang = new ArrayList<SanphamDTO>();
+        Collections.sort(dsspSelling,new Comparator<SanphamDTO>(){
+            @Override
+            public int compare(SanphamDTO mon1, SanphamDTO mon2){
+                    return mon1.soluongdaban - mon2.soluongdaban;
+            }
+        }); 
+        while(mang.size() != 10){
+        for(SanphamDTO sp : dsspSelling)
+            mang.add(sp);
+        }
   
+        return mang;
+    }
+    
     public void docDssp(){
         SanphamDAO data = new SanphamDAO();
         dssp = new ArrayList<SanphamDTO>();

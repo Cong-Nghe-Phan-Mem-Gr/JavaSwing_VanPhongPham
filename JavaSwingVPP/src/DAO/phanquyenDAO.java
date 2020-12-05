@@ -1,3 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package DAO;
 
 import DTO.PhanQuyenDTO;
 import java.sql.ResultSet;
@@ -5,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Nam
+ * @author chien
  */
 public class PhanQuyenDAO {
     MyDBConnection conn = new MyDBConnection();
@@ -63,8 +69,8 @@ public class PhanQuyenDAO {
             conn.executeUpdate(query);
         } catch (Exception e)
         {
-            System.out.println("L?i xÛa phan quyen");
-            //JOptionPane.showMessageDialog(null, "M„ gi?m gi· cÚn chi ti?t gi?m khÙng th? xÛa");
+            System.out.println("L·ªói x√≥a phan quyen");
+            //JOptionPane.showMessageDialog(null, "M√£ gi·∫£m gi√° c√≤n chi ti·∫øt gi·∫£m kh√¥ng th·ªÉ x√≥a");
         }
     }
 }

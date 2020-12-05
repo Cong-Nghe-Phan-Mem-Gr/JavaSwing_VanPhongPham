@@ -19,8 +19,10 @@ import static GUI.BanhangGUI.mangdisplaysp;
 import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.loadTienthua;
 import static GUI.BanhangGUI.loadgoiy;
+import static GUI.BanhangGUI.loadkm;
 import static BUS.HoadonBUS.tongsl;
 import static BUS.HoadonBUS.tongtien;
+import static GUI.BanhangGUI.check;
 import java.util.ArrayList;
 import javax.swing.event.TableModelEvent;
 
@@ -49,6 +51,7 @@ public class RemoveButtonRender extends AbstractCellEditor implements TableCellR
                         }
                     }
                     bus.removeCart(idsp);
+                    loadkm(tongtien);
                     loadinfo(tongsl,tongtien);
                     loadTienthua();
                     loadgoiy();

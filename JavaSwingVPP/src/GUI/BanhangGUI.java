@@ -30,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 import static BUS.SanphamBUS.dsspSelling;
 import static BUS.SanphamBUS.dsloai;
 import static BUS.HoadonBUS.giohang;
+import static BUS.HoadonBUS.tongsl;
+import static BUS.HoadonBUS.tongtien;
 import BUS.KhachHangBUS;
 import static java.awt.Color.green;
 import static java.awt.Color.red;
@@ -54,14 +56,14 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import static GUI.OverallFrame.currentIdnv;
 
-public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
+public class BanhangGUI extends JPanel implements ActionListener,MouseListener{
     JPanel searchpanel,functionpanel1,functionpanel2,infopanel,cartpanel,infokh,pagepanel;
     JPanel displaypanel[];
     JTextField searchtxt,maggtxt;
     public static JTextField tientratxt;
     JPanel displaysp;
     JComboBox loai;
-    //public static DecimalFormat df = new DecimalFormat(",000");
+    public static boolean check = false;
     private Font f = new Font("Arial",Font.BOLD,16);
     private Font f2 = new Font("Arial",Font.PLAIN,16);
     private LocalDateTime date = LocalDateTime.now();
@@ -81,7 +83,6 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
     public String idkh="Khách lẻ";
     public static ArrayList<String> category;
     int page=0,pagemax;
-    //ArrayList<SanphamGUI> mangdisplaysp;
     String[] cartheader = {"IDSP","Tên sản phẩm","Tồn kho","Đơn giá","","Số lượng","","Thành tiền",""};
     
     public BanhangGUI(){
@@ -93,6 +94,7 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
         setSize(945,650);
         setLayout(null);
         setBackground(new Color(0, 255, 204));
+        setBackground(Color.CYAN);
         //panel gio hang
         giohanglbl = new JLabel("Giỏ hàng");
         giohanglbl.setBounds(280,0,100,40);
@@ -142,7 +144,7 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
         searchbtnkh = new JLabel(new ImageIcon(this.getClass().getResource("/Icons/searchicon1.png")));
         searchbtnkh.setPreferredSize(new Dimension(40,30));
         searchbtnkh.addMouseListener(this);
-        infokhlbl1 = new JLabel("Tìm khách hàng...");
+        infokhlbl1 = new JLabel("Tìm thành viên...");
         infokhlbl1.setPreferredSize(new Dimension(180,30));
         infokhlbl1.setFont(new Font("Arial",Font.ITALIC,13));
         infokhlbl1.setForeground(Color.GRAY);
@@ -463,10 +465,17 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
             goiylbl7.setVisible(false);
         }
     }
-    
+    public static void loadkm(int tongtien){
+        if(check== true && tongtien>99999){
+            magglbl2.setText(Integer.toString(tongtien*2/100));
+        }else{
+            magglbl2.setText("0");
+        }
+    }
     public static void loadinfo(int tongsl,int tongtien){
         tongsl2.setText(Integer.toString(tongsl)+" sản phẩm");
         thanhtienlbl2.setText(Integer.toString(tongtien));
+        //loadkm();
         totallbl2.setText(Integer.toString(tongtien-Integer.parseInt(magglbl2.getText())));
         loadTienthua();
         loadgoiy();
@@ -475,6 +484,7 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
         tongsl2.setText("0 sản phẩm");
         thanhtienlbl2.setText("0");
         totallbl2.setText("0");
+        magglbl2.setText("0");
         loadTienthua();
         loadgoiy();
     }
@@ -484,13 +494,9 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
         closebtn.setVisible(true);
         infokhlbl2.setText(ho+" "+ten+"-"+sdt);
         this.idkh = idkh;
-      /*  if(tongtien > 1000000){
-            
-        }else if(){
-            
-        }else{
-            
-        }*/
+        check = true;
+        loadkm(tongtien);
+        loadinfo(tongsl,tongtien);
     }
     
     public void discardKH(){
@@ -499,6 +505,9 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
         closebtn.setVisible(false);
         infokhlbl2.setText("Khách lẻ");
         idkh = "Khách lẻ";
+        check = false;
+        loadkm(tongtien);
+        loadinfo(tongsl,tongtien);
         
     }
     public void loadsp(){
@@ -592,10 +601,10 @@ public class BanhangGUI extends JFrame implements ActionListener,MouseListener{
                         hd.append("\tHóa đơn\n");
                         hd.append("=====================================\n");
                         hd.append("ID hóa đơn:"+bus.loadIDHD()+"\n");
-                        hd.append("ID nhân viên:"+currentIdnv+"\n");
+                        hd.append("ID nhân viên:"+"NV1"+"\n");
                         hd.append("Ngày lập:"+ngaylaptxt.getText()+"\n");
                         hd.append("=====================================\n");
-                        hd.append("SL+\t+Đơn giá+\t+Thành tiền\n");
+                        hd.append("SL\tĐơn giá\tThành tiền\n");
                         for(GioHangDTO sp : giohang){
                             hd.append(sp.tensp+"\n");
                             hd.append(sp.sl+"\t"+sp.dongia+"\t"+sp.thanhtien+"\n");

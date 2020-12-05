@@ -23,6 +23,8 @@ import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.loadTienthua;
 import static GUI.BanhangGUI.loadgoiy;
 import static GUI.BanhangGUI.loadinfo;
+import static GUI.BanhangGUI.check;
+import static GUI.BanhangGUI.loadkm;
 import static GUI.BanhangGUI.mangdisplaysp;
 import javax.swing.table.DefaultTableModel;
 
@@ -67,6 +69,7 @@ public class DecreaseButtonRender extends AbstractCellEditor implements TableCel
                             }
                         }
                         bus.removeCart(idsp);
+                        loadkm(tongtien);
                         loadinfo(tongsl,tongtien);
                         loadTienthua();
                         loadgoiy();

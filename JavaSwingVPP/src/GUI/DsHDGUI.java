@@ -88,9 +88,18 @@ public class DsHDGUI extends JFrame implements MouseListener{
                 }else return false;
             }
         };
-        for(HoadonDTO hd : ds){
-            Object[] data = {hd.idhd,hd.idkh,hd.ngaylap,hd.tongtien,info};
-            model.addRow(data);
+            HoadonDTO hd = new HoadonDTO();
+            for(int i=0;i<dshd.size();i++){
+            hd = dshd.get(i);
+            if(i == dshd.size()-1){
+                Object [] data = {hd.getIdhd(),hd.getIdkh(),hd.getNgaylap(),hd.getTongtien(),info};
+                model.addRow(data);
+            }else{
+                if(!hd.idhd.equals(dshd.get(i+1).idhd)){
+                    Object [] data = {hd.getIdhd(),hd.getIdkh(),hd.getNgaylap(),hd.getTongtien(),info};
+                    model.addRow(data);
+                }
+            }
         }
         table.setModel(model);
         table.getColumnModel().getColumn(4).setCellRenderer(new InfoButtonRender());
@@ -115,7 +124,7 @@ public class DsHDGUI extends JFrame implements MouseListener{
             }else{
                 loaddata(dstimkiem);
             }
-        } if(e.getSource() == searchbtn){
+        } if(e.getSource() == closebtn){
             this.setVisible(false);
         }
     }

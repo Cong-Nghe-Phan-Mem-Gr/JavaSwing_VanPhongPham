@@ -7,6 +7,8 @@ import static GUI.BanhangGUI.carttable;
 import static GUI.BanhangGUI.loadinfo;
 import static GUI.BanhangGUI.loadTienthua;
 import static GUI.BanhangGUI.mangdisplaysp;
+import static GUI.BanhangGUI.loadkm;
+import static GUI.BanhangGUI.check;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +50,7 @@ public class IncreaseButtonRender extends AbstractCellEditor implements TableCel
                              sp.setTonkho(tonkho-1);
                          }
                     }
+                    loadkm(tongtien);
                     loadinfo(tongsl,tongtien);
                     loadTienthua();
                 }else{

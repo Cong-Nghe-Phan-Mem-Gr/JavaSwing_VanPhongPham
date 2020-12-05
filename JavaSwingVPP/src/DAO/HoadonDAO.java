@@ -17,6 +17,7 @@ public class HoadonDAO {
     MyDBConnection conn = new MyDBConnection();
     ResultSet rs;
     public static ArrayList<HoadonDTO> dshd;
+    public static ArrayList<HoadonDTO> dshd2;
     public HoadonDAO(){};
     
     public int getIdhd(){
@@ -30,32 +31,26 @@ public class HoadonDAO {
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null,"Khong doc duoc idhd");
         }
+        System.out.println(count);
         return count;
     }
-    public ArrayList dochoadon(String id)
-            //ham lay thong in user
-    {
-        dshd = new ArrayList<HoadonDTO>();
-        try
-        {
-            String query = "select * from hoadon where idnv='"+id+"'";
-            ResultSet rs = conn.executeQuery(query);//thuc thi truy van
-        while (rs.next())
-            {
-                //System.out.println(rs.getString(1)+" "+rs.getString(2));
-                HoadonDTO pndto = new HoadonDTO();
-                pndto.setIdhd(rs.getString(1));//ghi du lieu tu databse vao DTO
-                pndto.setIdnv(rs.getString(2));
-                pndto.setNgaylap(rs.getString(3));
-                pndto.setTongtien(Integer.parseInt(rs.getString(4)));
-                pndto.setTrangthai(rs.getInt(5));
-                dshd.add(pndto);//them DTO vao array cua DAO
-            }
-        } catch(Exception e)
-        {
+    
+    public ArrayList dochoadon(){
+       ArrayList<HoadonDTO> dshoadon = new ArrayList();
+        try{
+            String query = "select * from hoadon inner join chitiethoadon on hoadon.idhd = chitiethoadon.idhd inner join sanpham on chitiethoadon.idsanpham = sanpham.idsanpham where hoadon.trangthai='1'";
+            rs = conn.executeQuery(query);
+            while(rs.next()){
+                HoadonDTO hoadon = new HoadonDTO(rs.getString("idhd"),rs.getString("idkh"),rs.getString("idnv"),
+                            rs.getString("idsanpham"),rs.getString("tensanpham"),rs.getInt("dongia"),rs.getInt("soluong"),rs.getInt("thanhtien"),
+                            rs.getInt("tongtien"),rs.getString("ngaylap"),rs.getInt("trangthai"));
+                dshoadon.add(hoadon);
+            } 
+        }catch(SQLException e){
+            //JOptionPane.showMessageDialog(null,"Không thể đọc được dshoadon");
             System.out.println(e);
         }
-        return dshd;
+        return dshoadon;
     }
     public ArrayList<HoadonDTO> DocDshoadon(String id){
         ArrayList<HoadonDTO> dshoadon = new ArrayList();

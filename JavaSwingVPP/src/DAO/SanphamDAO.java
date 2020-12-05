@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import static GUI.BanhangGUI.category;
 import java.util.HashSet;
 
 

@@ -24,6 +24,7 @@ public class HoadonBUS {
     private String idhd;
     public static ArrayList<HoadonDTO> dshoadon; 
     public static ArrayList<HoadonDTO> dshd; 
+    public static ArrayList<HoadonDTO> dshd2; 
     //public static String idhd;
     
     public HoadonBUS(){};
@@ -32,6 +33,12 @@ public class HoadonBUS {
         HoadonDAO data = new HoadonDAO();
         dshd = new ArrayList<HoadonDTO>();
         dshd = data.DocDshoadon(id);
+    }
+    
+    public void docDshoadon(){
+        HoadonDAO data = new HoadonDAO();
+        dshd2 = new ArrayList<HoadonDTO>();
+        dshd2 = data.dochoadon();
     }
   
     public void addCart(String idsp,String tensp,int tonkho,int dongia){
@@ -61,22 +68,23 @@ public class HoadonBUS {
     }
 
     public void removeCart(String idsp){
-        int i=0;
+        //int i=0;
         GioHangDTO spxoa = new GioHangDTO();
-        for(GioHangDTO gh : giohang){
-            if(idsp.equals(gh.idsp)){
+        for(int i=0;i<giohang.size();i++){
+            spxoa = giohang.get(i);
+            if(idsp.equals(giohang.get(i).idsp)){
                 for(SanphamDTO sp : dsspSelling){
                     if(sp.getIdsp().equals(idsp)){
-                        sp.setSoluongdaban(sp.getSoluongdaban()-gh.sl);
-                        sp.setTonkho(sp.getTonkho()+gh.sl);
+                        sp.setSoluongdaban(sp.getSoluongdaban()-giohang.get(i).sl);
+                        sp.setTonkho(sp.getTonkho()+giohang.get(i).sl);
                         break;
                     }
                 }
-                spxoa=giohang.get(i);
                 tongtien -= spxoa.thanhtien;
                 tongsl -= spxoa.sl;
+                System.out.println("tong sau"+tongtien);
+                break;
             }
-            i++;
         }
         giohang.remove(spxoa);
     }
@@ -86,6 +94,7 @@ public class HoadonBUS {
             if(gh.getIdsp().equals(idsp)){
                 gh.setSl(gh.getSl()-sl);
                 gh.setTonkho(gh.getTonkho()+sl);
+                gh.thanhTien();
                 tongtien -= sl*gh.dongia;
                 tongsl -= sl;;
                 break;
@@ -105,6 +114,7 @@ public class HoadonBUS {
             if(gh.getIdsp().equals(idsp)){
                 gh.setSl(gh.getSl()+sl);
                 gh.setTonkho(gh.getTonkho()-sl);
+                gh.thanhTien();
                 tongtien += sl*gh.dongia;
                 tongsl += sl;
                 break;
@@ -145,6 +155,22 @@ public class HoadonBUS {
     public String loadIDHD(){
         HoadonDAO data = new HoadonDAO();
         return "HD"+(data.getIdhd()+1);
+    }
+    
+    public int tongtien(){
+        int tong=0;
+        for(HoadonDTO hd: dshd2){
+            tong+=hd.tongtien;
+        }
+        return tong;
+    }
+    
+    public int tongsp(){
+        int tong=0;
+        for(HoadonDTO hd: dshd2){
+            tong+=hd.soluong;
+        }
+        return tong;
     }
     
     public void checkOut(String idkh,String idnv,String date){
